@@ -1,41 +1,14 @@
 <template>
   <section class="section">
-    <div class="columns is-mobile">
-      <card
-        title="Free"
-        icon="github"
-      >
-        Open source on <a href="https://github.com/buefy/buefy">
-          GitHub
-        </a>
-      </card>
+    <b-field label="URL">
+      <b-input
+        v-model="url"
+        @keypress.native.enter.exact="get_slide"
+      ></b-input>
+    </b-field>
 
-      <card
-        title="Responsive"
-        icon="cellphone-link"
-      >
-        <b class="has-text-grey">
-          Every
-        </b> component is responsive
-      </card>
-
-      <card
-        title="Modern"
-        icon="alert-decagram"
-      >
-        Built with <a href="https://vuejs.org/">
-          Vue.js
-        </a> and <a href="http://bulma.io/">
-          Bulma
-        </a>
-      </card>
-
-      <card
-        title="Lightweight"
-        icon="arrange-bring-to-front"
-      >
-        No other internal dependency
-      </card>
+    <div v-for="(url, index) in urls" :key="index">
+      <img :src="url" :alt="index">
     </div>
   </section>
 </template>
@@ -44,10 +17,25 @@
 import Card from '~/components/Card'
 
 export default {
-  name: 'HomePage',
+  data() {
+    return {
+      url: "",
+      urls: {}
+    }
+  },
 
-  components: {
-    Card
+  methods:  {
+    async get_slide() {
+      this.url = this.url.trim()
+      if (this.url.indexOf("https://speakerdeck.com/") === 0) {
+        const res = await this.$axios.$get(`/api/slides?url=${this.url}`)
+        for (var i = 0; i < res.page_num; i++) {
+          this.$set(this.urls, i, res.image_url.replace("slide_0", `slide_${i}`))
+        }
+      } else {
+        console.log("Bad")
+      }
+    }
   }
 }
 </script>
