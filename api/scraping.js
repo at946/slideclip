@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer')
 
-async function slides(url) {
+async function get_sd_slides(url) {
   const browser = await puppeteer.launch({
     args: [
       '--no-sandbox',
@@ -29,6 +29,33 @@ async function slides(url) {
   }
 }
 
+async function get_ss_slides(url) {
+  const browser = await puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-dev-shm-usage'
+    ]
+  })
+
+  const page = await browser.newPage()
+
+  await page.goto(url)
+
+  const image_urls = await page.evaluate(() => {
+    const parents = document.getElementsByClassName("slide_container")[0].getElementsByTagName("section")
+    const result = []
+    for (var i = 0; i < parents.length; i++) {
+      result.push(parents[i].getElementsByTagName("img")[0].dataset.normal)
+    }
+    return result
+  })
+
+  await browser.close()
+
+  return image_urls
+}
+
 module.exports = {
-  slides
+  get_sd_slides,
+  get_ss_slides
 }

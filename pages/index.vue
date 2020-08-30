@@ -20,18 +20,22 @@ export default {
   data() {
     return {
       url: "",
-      urls: {}
+      urls: []
     }
   },
 
   methods:  {
     async get_slide() {
       this.url = this.url.trim()
-      if (this.url.indexOf("https://speakerdeck.com/") === 0) {
-        const res = await this.$axios.$get(`/api/slides?url=${this.url}`)
+      if ( this.url.indexOf("https://speakerdeck.com/") === 0 ) {
+        const res = await this.$axios.$get(`/api/sd/slides?url=${this.url}`)
+        this.urls = []
         for (var i = 0; i < res.page_num; i++) {
-          this.$set(this.urls, i, res.image_url.replace("slide_0", `slide_${i}`))
+          this.urls.push(res.image_url.replace("slide_0", `slide_${i}`))
         }
+      } else if ( this.url.indexOf("https://www.slideshare.net/") === 0 ) {
+        const res = await this.$axios.$get(`/api/ss/slides?url=${this.url}`)
+        this.urls = res
       } else {
         console.log("Bad")
       }
