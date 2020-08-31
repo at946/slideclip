@@ -7,7 +7,7 @@
       ></b-input>
     </b-field>
 
-    <div v-for="(url, index) in urls" :key="index">
+    <div v-for="(url, index) in slide_urls" :key="index">
       <img :src="url" :alt="index">
     </div>
   </section>
@@ -20,23 +20,22 @@ export default {
   data() {
     return {
       url: "",
-      urls: []
+      slide_urls: [],
+      transcripts: []
     }
   },
 
   methods:  {
     async get_slide() {
       this.url = this.url.trim()
-      if ( this.url.indexOf("https://speakerdeck.com/") === 0 ) {
-        const res = await this.$axios.$get(`/api/sd/slides?url=${this.url}`)
-        this.urls = []
-        for (var i = 0; i < res.page_num; i++) {
-          this.urls.push(res.image_url.replace("slide_0", `slide_${i}`))
-        }
-      } else if ( this.url.indexOf("https://www.slideshare.net/") === 0 ) {
-        const res = await this.$axios.$get(`/api/ss/slides?url=${this.url}`)
-        this.urls = res
+      if ( this.url.indexOf("https://speakerdeck.com/") === 0 || this.url.indexOf("https://www.slideshare.net/") === 0 ) {
+        this.slide_urls = await this.$axios.$get(`/api/slides?url=${this.url}`)
+        // transcriptを使うようになったら
+        // const res = await this.$axios.$get(`/api/slides?url=${this.url}`)
+        // this.slide_urls = res[1][0]
+        // this.transcripts = res[1][1]
       } else {
+        // ToDo: エラーメッセージ出したい
         console.log("Bad")
       }
     }
