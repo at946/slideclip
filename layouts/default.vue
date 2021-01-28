@@ -8,7 +8,8 @@
       <nuxt />
     </main>
 
-    <footer class="footer py-4">
+    <footer class="footer p-4">
+      <p class="copyright">(c) seiei</p>
     </footer>
   </div>
 </template>
@@ -35,5 +36,10 @@ main {
 
 .footer {
   background-color: gray;
+
+  .copyright {
+    color: lightgray;
+    text-align: center;
+  }
 }
 </style>

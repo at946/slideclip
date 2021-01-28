@@ -7,9 +7,13 @@
         Enter the URL of SlideShare or SpeakerDeck.
       </p>
       <div class="input-field mx-auto mb-2">
-        <input v-model="url" id="input_url" class="input" placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study" />
+        <input
+          id="input_url"
+          class="input"
+          v-model="url"
+          placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study" />
       </div>
-      <p v-if="err_flg" class="err_msg my-2">
+      <p class="err_msg my-2" v-if="err_flg">
         The slides cannot be found...
       </p>
 
@@ -55,7 +59,10 @@ export default {
 
     goto_arrange() {
       this.url = this.url.trim()
-      if ( this.url.indexOf("https://speakerdeck.com/") === 0 ) {
+      if (
+        this.url.indexOf("https://speakerdeck.com/") === 0 ||
+        this.url.indexOf("https://www.slideshare.net/") === 0
+      ) {
         this.$router.push('/arrange?url=' + this.url)
       } else {
         this.err_flg = true

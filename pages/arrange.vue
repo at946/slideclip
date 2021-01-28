@@ -1,6 +1,6 @@
 <template>
-  <section class="px-10 py-6">
-    <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides">
+  <section class="px-10 py-6 mx-auto">
+    <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides" class="wrap-slide">
       <img :src="url" :alt="index" class="slide my-3">
     </div>
   </section>
@@ -34,8 +34,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.slide {
-  width: 100%;
-  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+.wrap-slide {
+  text-align: center;
+  
+  .slide {
+    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    display: inline-block;
+    text-align: center;
+    max-width: 100%;
+  }
 }
 </style>
