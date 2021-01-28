@@ -106,6 +106,14 @@ export default {
   &:hover {
     opacity: 0.75;
   }
+
+  &:disabled {
+    background-color: darkgray;
+    &:hover {
+      opacity: 1.0;
+      cursor: not-allowed;
+    }
+  }
 }
 
 .err_msg {
