@@ -29,6 +29,8 @@ export default {
   ** Global CSS
   */
   css: [
+    '~/assets/css/destyle.css',
+    '~/assets/css/common.scss'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -50,8 +52,6 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://buefy.github.io/#/documentation
-    'nuxt-buefy',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
   ],

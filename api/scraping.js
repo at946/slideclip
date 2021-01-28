@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer')
 
 async function get_slides(url) {
   var service_id = 0 // 0: speaker deck, 1: slideshare // データ取得の分岐に利用
-  if      ( url.indexOf("https://speakerdeck.com/") === 0 ) { service_id = 0 }
-  else if ( url.indexOf("https://www.slideshare.net/") === 0 ) { service_id = 1 }
+  if      ( url.indexOf("https://speakerdeck.com/") === 0 )     { service_id = 0 }
+  else if ( url.indexOf("https://www.slideshare.net/") === 0 )  { service_id = 1 }
   else    { return 0 }
 
   // puppeteerの開始
