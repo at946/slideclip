@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <header class="header">
-      <span class="title">SlideClip</span>
+      <nuxt-link id="logo" to="/">SlideClip</nuxt-link>
     </header>
 
     <main>
@@ -33,7 +33,7 @@ main {
   padding: 1rem;
   border-bottom: solid 1px lightgray;
 
-  .title {
+  #logo {
     font-weight: bold;
   }
 }

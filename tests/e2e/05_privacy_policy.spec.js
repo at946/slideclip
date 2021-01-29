@@ -1,8 +1,8 @@
 describe("サービス提供者として、プライバシーポリシーを伝えたい、なぜならユーザーにプライバシーポリシーに同意した上で利用してほしいからだ", () =>  {
 
   const root_url = "http://localhost:3000/"
+  const arrange_url = root_url + "arrange?url=" + encodeURIComponent("https://www.slideshare.net/Slideshare/slideshare-is-joining-scribd-237760779")
   const pp_url = root_url + "pp"
-  const speakerdeck_url = "https://speakerdeck.com/kishiyyyyy/gke-case-study"
 
   test("トップページで、フッターの「privacy policy」リンクを選択した場合、PrivacyPolicyページに遷移すること", async () => {
     // トップページにアクセス
@@ -20,7 +20,7 @@ describe("サービス提供者として、プライバシーポリシーを伝�
     jest.setTimeout(10000)
 
     // Arrangeページにアクセス
-    await page.goto(root_url + "arrange?url=" + encodeURIComponent(speakerdeck_url))
+    await page.goto(arrange_url)
     await page.waitForSelector("#sec_slides")
 
     // フッターの「privacy policy」リンクをクリック
