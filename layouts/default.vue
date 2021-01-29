@@ -9,14 +9,9 @@
     </main>
 
     <footer class="footer p-4">
-      <ul class="mb-1" style="text-align:center;">
-        <li>
-          <nuxt-link
-            id="link_footer_tos"
-            class="footer-link"
-            to="/tos"
-          >terms of service</nuxt-link>
-        </li>
+      <ul class="mb-2" style="text-align:center;">
+        <li><nuxt-link id="link_footer_tos" class="footer-link mx-1" to="/tos">terms of service</nuxt-link></li>
+        <li><nuxt-link id="link_footer_pp" class="footer-link mx-1" to="/pp">privacy policy</nuxt-link></li>
       </ul>
       <p class="copyright">(c) seiei</p>
     </footer>
