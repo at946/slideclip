@@ -5,9 +5,7 @@ describe("ユーザーとして、存在しないURLを検索したときその�
   const slideshare_not_found_url = "https://www.slideshare.net/a"
   const err_msg = "The slides cannot be found..."
 
-  test("トップページで、SpeakerDeckドメインだがスライドが存在しない場合、トップページでエラーメッセージが表示されること", async () => {
-    // jest.setTimeout(10000)
-    
+  test("トップページで、SpeakerDeckドメインだがスライドが存在しない場合、トップページでエラーメッセージが表示されること", async () => {    
     // トップページにアクセス
     await page.goto(root_url)
 
@@ -32,8 +30,6 @@ describe("ユーザーとして、存在しないURLを検索したときその�
   })
 
   test("トップページで、SlideShareドメインだがスライドが存在しない場合、トップページでエラーメッセージが表示されること", async () => {
-    // jest.setTimeout(20000) // timeout値を5000->10000に変更
-
     // トップページにアクセス
     await page.goto(root_url)
 

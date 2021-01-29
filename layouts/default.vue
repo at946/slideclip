@@ -9,6 +9,15 @@
     </main>
 
     <footer class="footer p-4">
+      <ul class="mb-1" style="text-align:center;">
+        <li>
+          <nuxt-link
+            id="link_footer_tos"
+            class="footer-link"
+            to="/tos"
+          >terms of service</nuxt-link>
+        </li>
+      </ul>
       <p class="copyright">(c) seiei</p>
     </footer>
   </div>
@@ -40,6 +49,27 @@ main {
   .copyright {
     color: lightgray;
     text-align: center;
+  }
+
+  ul {
+    text-align: center;
+    
+    li {
+      color: white;
+      display: inline-block;
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .nuxt-link-active {
+        font-weight: bold;
+        &:hover {
+          text-decoration: none;
+          cursor: not-allowed;
+        }
+      }
+    }
   }
 }
 </style>

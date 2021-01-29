@@ -16,13 +16,12 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
     await page.click('#btn_arrange')
     
     // 画面遷移を待つ
-    await page.waitForNavigation()
+    await page.waitForSelector('#sec_slides')
     
     // 検証：Arrangeページに遷移した
     await expect(page.url()).toBe(root_url + 'arrange?url=https%3A%2F%2Fspeakerdeck.com%2Fkishiyyyyy%2Fgke-case-study')
     
     // 検証：スライドが38枚表示されている
-    await page.waitForSelector('#sec_slides')
     const slides = await page.$$eval('.slide', nodes => nodes.map(n => n.src))
     await expect(slides.length).toBe(38)
 

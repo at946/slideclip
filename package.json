@@ -7,8 +7,8 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "test": "jest --config jest.e2e.config.js --runInBand",
-    "tests": "jest --config jest.e2e.config.js --runInBand ./tests/e2e",
+    "test": "jest --config jest.e2e.config.js",
+    "tests": "jest --config jest.e2e.config.js ./tests/e2e",
     "testServer": "nuxt build && nuxt start --port 3000"
   },
   "dependencies": {
