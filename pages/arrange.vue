@@ -1,19 +1,23 @@
 <template>
-  <section class="px-10 py-6 mx-auto">
-    <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides" class="wrap-slide">
-      <img :src="url" :alt="index" class="slide my-3">
-    </div>
-  </section>
+  <div>
+    <section class="px-10 py-6 mx-auto">
+      <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides" class="wrap-slide">
+        <img :src="url" :alt="index" class="slide my-3">
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex"
+
 export default {
   data() {
     return {
       slide_urls: []
     }
   },
-
+  
   mounted() {
     this.get_slides()
   },
@@ -22,11 +26,21 @@ export default {
     async get_slides() {
       // クエリパラメーターからターゲットスライドのURLを取得
       const url = this.$route.query.url
-      // /api/index.jsの/slides APIを使ってスライドの画像のURLを取得し、slide_urlsに格納
-      if ( url.indexOf("https://speakerdeck.com/") === 0 || url.indexOf("https://www.slideshare.net/") === 0 ) {
+
+      if (
+        url.indexOf("https://speakerdeck.com/") === 0 ||
+        url.indexOf("https://www.slideshare.net/") === 0
+      ) {
+        // /api/index.jsの/slides APIを使ってスライドの画像のURLを取得し、slide_urlsに格納
         this.slide_urls = await this.$axios.$get(`/api/slides?url=${url}`)
+        // スライドを取得できない（NOT FOUND）の場合、トップページにリダイレクトする
+        if (!this.slide_urls.length) {
+          this.$store.commit("url/set_err_flg", true)
+          this.$router.push('/')
+        }
       } else {
-        // ToDo: エラーメッセージ出したい
+        this.$store.commit("url/set_err_flg", true)
+        this.$router.push("/")
       }
     }
   }

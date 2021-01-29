@@ -21,51 +21,44 @@
         id="btn_arrange"
         class="button"
         @click="goto_arrange"
-        v-bind:disabled="url == ''">
+        v-bind:disabled="!url.length">
         Arrange
       </button>
-
-      <div v-for="(url, index) in slide_urls" :key="index">
-        <img :src="url" :alt="index">
-      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex"
+
 export default {
   data() {
     return {
-      url: "",
-      slide_urls: [],
-      err_flg: false
+      slide_urls: []
+    }
+  },
+
+  computed: {
+    url: {
+      get () { return this.$store.state.url.url },
+      set (value) { this.$store.commit("url/set_url", value) }
+    },
+    err_flg: {
+      get () { return this.$store.state.url.err_flg },
     }
   },
 
   methods:  {
-    async get_slide() {
-      this.url = this.url.trim()
-      if ( this.url.indexOf("https://speakerdeck.com/") === 0 || this.url.indexOf("https://www.slideshare.net/") === 0 ) {
-        this.slide_urls = await this.$axios.$get(`/api/slides?url=${this.url}`)
-        // transcriptを使うようになったら
-        // const res = await this.$axios.$get(`/api/slides?url=${this.url}`)
-        // this.slide_urls = res[1][0]
-        // this.transcripts = res[1][1]
-      } else {
-        // ToDo: エラーメッセージ出したい
-        console.log("Bad")
-      }
-    },
-
     goto_arrange() {
       this.url = this.url.trim()
       if (
         this.url.indexOf("https://speakerdeck.com/") === 0 ||
         this.url.indexOf("https://www.slideshare.net/") === 0
       ) {
+        this.$store.commit("url/set_err_flg", false)
         this.$router.push('/arrange?url=' + this.url)
       } else {
-        this.err_flg = true
+        this.$store.commit("url/set_err_flg", true)
       }
     }
   }

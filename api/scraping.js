@@ -39,21 +39,24 @@ async function get_slides(url) {
 async function get_speakerdeck_slides(page) {
   return await page.evaluate(() => {
     const slide_urls = []
-    // const transcripts = []
 
-    // base_image_urlとしてclass="deck-background" 要素の style="background-image" を取得
-    // url("~")の形式になっているので、「url("」「")」を削除
-    const base_image_url = document.getElementsByClassName("deck-background")[0].style.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '')
-    
-    // transcriptsの親要素を取得（=ページ数として利用）
-    const transcript_elements = document.getElementsByClassName("transcript")[0].getElementsByTagName("li")
-    for (var i = 0; i < transcript_elements.length; i++) {
-      // speakerdeckは１つのスライドに対してほぼ同じURL。"slide_${ページ数}.jpg"となっているので全てのページ数分の画像URLを取ってくる
-      slide_urls.push(base_image_url.replace("slide_0", `slide_${i}`))
-      // transcripts.push(transcript_elements[i].innerText)
+    // スライドの要素を取得
+    const el_slide = document.getElementsByClassName("deck-background")[0]
+
+    // スライド要素が存在する（NOT FOUNDでない）場合、スライド画像を取得する
+    if (el_slide) {
+      // スライド画像は[background_image: url("~")]の形式になっているので、「url("」「")」を削除してスライド画像のベースURLを取得
+      const base_image_url = el_slide.style.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '')
+      
+      // transcriptsの親要素を取得（=ページ数として利用）
+      const transcript_elements = document.getElementsByClassName("transcript")[0].getElementsByTagName("li")
+      for (var i = 0; i < transcript_elements.length; i++) {
+        // speakerdeckは１つのスライドに対してほぼ同じURL。"slide_${ページ数}.jpg"となっているので全てのページ数分の画像URLを取ってくる
+        slide_urls.push(base_image_url.replace("slide_0", `slide_${i}`))
+      }
     }
 
-    // return [slide_urls, transcripts]
+    // スライドがある場合はスライド画像のURLの配列、ない場合は空の配列を返却する
     return slide_urls
   })
 }
@@ -61,19 +64,21 @@ async function get_speakerdeck_slides(page) {
 async function get_slideshare_slides(page) {
   return await page.evaluate(() => {
     const slide_urls = []
-    // const transcripts = []
     
-    // slide_urlsの親要素を取得
-    const slide_url_elements = document.getElementsByClassName("slide_container")[0].getElementsByTagName("section")
-    // const transcript_elements = document.getElementsByClassName("transcripts")[0].getElementsByTagName("li")
-    
-    for (var i = 0; i < slide_url_elements.length; i++) {
-      // slide_url_elements配下のimageタグの data-normal 属性のURLを取得
-      slide_urls.push(slide_url_elements[i].getElementsByTagName("img")[0].dataset.normal)
-      // transcripts.push(transcript_elements[i].innerText)
+    // スライドの要素を取得
+    const el_slide = document.getElementsByClassName("slide_container")[0]
+
+    // スライド要素が存在する（NotFoundでない）場合、スライド画像を取得する
+    if (el_slide) {
+      // slide_urlsの親要素を取得
+      const slide_url_elements = el_slide.getElementsByTagName("section")
+      for (var i = 0; i < slide_url_elements.length; i++) {
+        // slide_url_elements配下のimageタグの data-normal 属性のURLを取得
+        slide_urls.push(slide_url_elements[i].getElementsByTagName("img")[0].dataset.normal)
+      }
     }
   
-    // return [slide_urls, transcripts]
+    // スライドがある場合はスライド画像のURLの配列、ない場合は空の配列を返却する
     return slide_urls
   })
 }
