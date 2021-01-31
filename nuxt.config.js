@@ -1,4 +1,7 @@
 export default {
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
   /*
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
@@ -60,8 +63,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'http://localhost:3000',
-    browserBaseURL: 'https://slideclip.herokuapp.com'
+    // baseURL: 'http://localhost:3000',
+    // browserBaseURL: 'https://slideclip.herokuapp.com'
   },
   /*
   ** Fontawesome
