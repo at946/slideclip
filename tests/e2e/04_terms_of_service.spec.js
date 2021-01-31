@@ -16,7 +16,6 @@ describe("サービス提供者として、利用規約を伝えたい、なぜ�
   })
 
   test("Arrangeページで、フッターの「terms of service」リンクを選択した場合、TermsOfServiceページに遷移すること", async () => {
-    jest.setTimeout(10000) // timeout値を5000->10000に変更
 
     // Arrangeページにアクセス
     await page.goto(root_url + "arrange?url=" + encodeURIComponent("https://speakerdeck.com/kishiyyyyy/gke-case-study"))

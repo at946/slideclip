@@ -4,8 +4,6 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
   const speakerdeck_url = 'https://speakerdeck.com/kishiyyyyy/gke-case-study'
 
   test('トップページでSpeakerDeckのURLを入力して「Arrange」ボタンを選択した場合、URL先のスライドがすべて縦方向に表示されること', async () => {
-    jest.setTimeout(10000) // timeout値を5000->10000に変更
-
     // トップページへアクセス
     await page.goto(root_url)
     

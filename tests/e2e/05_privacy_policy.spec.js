@@ -17,8 +17,6 @@ describe("サービス提供者として、プライバシーポリシーを伝�
   })
 
   test("Arrangeページで、フッターの「privacy policy」リンクを選択した場合、PrivacyPolicyページに遷移すること", async () => {
-    jest.setTimeout(10000)
-
     // Arrangeページにアクセス
     await page.goto(arrange_url)
     await page.waitForSelector("#sec_slides")

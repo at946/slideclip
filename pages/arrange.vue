@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loading v-if="!slide_urls.length" />
     <section class="px-10 py-6 mx-auto">
       <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides" class="wrap-slide">
         <img :src="url" :alt="index" class="slide my-3">
@@ -18,12 +19,17 @@
 <script>
 import { mapMutations } from "vuex"
 import { faTwitter } from "@fortawesome/free-brands-svg-icons"
+import Loading from "@/components/Loading.vue"
 
 export default {
   data() {
     return {
       slide_urls: []
     }
+  },
+
+  components: {
+    Loading
   },
 
   computed: {

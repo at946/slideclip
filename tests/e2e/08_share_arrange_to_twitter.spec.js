@@ -4,8 +4,6 @@ describe("サービス提供者として、サービスを気に入ったユー�
   const arrange_url = root_url + "arrange?url=" + encodeURIComponent("https://speakerdeck.com/kishiyyyyy/gke-case-study")
 
   test("Arrangeページで、「Share」ボタンを選択した場合、「閲覧中のスライドのArrangeページのURL」と「#slideclip」が入力されたTwitterのShareページに遷移すること", async () => {
-    jest.setTimeout(10000)
-    
     // Arrangeページにアクセス
     await page.goto(arrange_url)
     await page.waitForSelector("#sec_slides")
