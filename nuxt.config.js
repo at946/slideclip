@@ -53,6 +53,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     'nuxt-fontawesome',
   ],
   /*
@@ -65,6 +66,12 @@ export default {
   */
   fontawesome: {
     component: 'fa'
+  },
+  /*
+  ** Proxy
+  */
+  proxy: {
+    '/api': 'http://localhost:3000/api'
   },
   /*
   ** Build configuration
