@@ -63,8 +63,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    // baseURL: 'http://localhost:3000',
-    // browserBaseURL: 'https://slideclip.herokuapp.com'
+    baseURL: process.env.BASE_URL
   },
   /*
   ** Fontawesome
