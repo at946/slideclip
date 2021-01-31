@@ -49,7 +49,18 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/google-analytics'
   ],
+  googleAnalytics: {
+    id: process.env.GOOGLE_ANALYTICS_ID,
+    dev: false
+  },
+  publicRuntimeConfig: {
+    googleAnalytics: {
+      id: process.env.GOOGLE_ANALYTICS_ID,
+      dev: false
+    }
+  },
   /*
   ** Nuxt.js modules
   */
