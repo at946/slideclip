@@ -5,11 +5,19 @@
         <img :src="url" :alt="index" class="slide my-3">
       </div>
     </section>
+
+    <section class="py-6" style="text-align: center;">
+      <Button id="btn_twitter_share" :is_twitter="true" @click="share_to_twitter">
+        <fa :icon="faTwitter" class="mr-1" />Share
+      </Button>
+    </section>
+
   </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex"
+import { faTwitter } from "@fortawesome/free-brands-svg-icons"
 
 export default {
   data() {
@@ -17,8 +25,16 @@ export default {
       slide_urls: []
     }
   },
+
+  computed: {
+    url: {
+      get () { return this.$store.state.url.url }
+    },
+    faTwitter () { return faTwitter }
+  },
   
   mounted() {
+    this.$store.commit("url/set_url", this.$route.query.url)
     this.get_slides()
   },
 
@@ -42,6 +58,13 @@ export default {
         this.$store.commit("url/set_err_flg", true)
         this.$router.push("/")
       }
+    },
+
+    share_to_twitter() {
+      window.open(
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.origin + this.$route.fullPath) + "&hashtags=slideclip",
+        "_blank"
+      )
     }
   }
 }

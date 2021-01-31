@@ -66,7 +66,9 @@
 
       <Card>
         <h1 class="card-title mb-3">Share if you like !!</h1>
-        <Button :is_twitter="true"><fa :icon="faTwitter" class="mr-1" />Share</Button>
+        <Button id="btn_twitter_share" :is_twitter="true" @click="share_to_twitter">
+          <fa :icon="faTwitter" class="mr-1" />Share
+        </Button>
       </Card>
     </section>
   </div>
@@ -122,6 +124,13 @@ export default {
       } else {
         this.$store.commit("url/set_err_flg", true)
       }
+    },
+
+    share_to_twitter() {
+      window.open(
+        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.origin) + "&hashtags=slideclip",
+        "_blank"
+      )
     }
   }
 }
