@@ -53,12 +53,12 @@ export default {
   ],
   googleAnalytics: {
     id: process.env.GOOGLE_ANALYTICS_ID,
-    dev: false
+    dev: process.env.NODE_ENV == 'production'
   },
   publicRuntimeConfig: {
     googleAnalytics: {
       id: process.env.GOOGLE_ANALYTICS_ID,
-      dev: false
+      dev: process.env.NODE_ENV == 'production'
     }
   },
   /*
