@@ -53,25 +53,21 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/proxy',
     'nuxt-fontawesome',
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:3000',
+    browserBaseURL: 'https://slideclip.herokuapp.com'
+  },
   /*
   ** Fontawesome
   */
   fontawesome: {
     component: 'fa'
-  },
-  /*
-  ** Proxy
-  */
-  proxy: {
-    '/api': 'http://localhost:3000/api'
   },
   /*
   ** Build configuration
