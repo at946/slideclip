@@ -1,6 +1,8 @@
 @import '_spacing.scss';
+@import '_color.scss';
 
 body {
+  color: $text;
   font-family: "Helvetica Neue",
     Arial,
     "Hiragino Kaku Gothic ProN",
