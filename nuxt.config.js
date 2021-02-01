@@ -1,3 +1,5 @@
+const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
+
 export default {
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000'
@@ -12,11 +14,22 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
+    htmlAttrs: {
+      lang: 'ja',
+      prefix: 'og: http://ogp.me/ns#'
+    },
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { name: 'description', content: process.env.npm_package_description },
+      { property: 'og:site_name', content: process.env.npm_package_name },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:title', content: process.env.npm_package_name },
+      { property: 'og:description', content: process.env.npm_package_description },
+      { property: 'og:url', content: baseUrl },
+      { property: 'og:image', content: baseUrl + '/ogp.png' },
+      { name: 'twitter:card', content: 'summary' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
