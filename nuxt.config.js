@@ -29,7 +29,8 @@ export default {
       { property: 'og:description', content: process.env.npm_package_description },
       { property: 'og:url', content: baseUrl },
       { property: 'og:image', content: baseUrl + '/ogp.png' },
-      { name: 'twitter:card', content: 'summary' }
+      { name: 'twitter:card', content: 'summary' },
+      {  name: 'google-site-verification', content: 'bU22upozdv2QbW2QOc8N7sC_1xD8Lu9nOOGzjIfh6rQ'}
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
