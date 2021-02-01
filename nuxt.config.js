@@ -49,16 +49,7 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxtjs/google-analytics'
   ],
-  googleAnalytics: {
-    id: process.env.GOOGLE_ANALYTICS_ID
-  },
-  publicRuntimeConfig: {
-    googleAnalytics: {
-      id: process.env.GOOGLE_ANALYTICS_ID
-    }
-  },
   /*
   ** Nuxt.js modules
   */
@@ -66,6 +57,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     'nuxt-fontawesome',
+    '@nuxtjs/google-analytics'
   ],
   /*
   ** Axios module configuration
@@ -79,6 +71,21 @@ export default {
   */
   fontawesome: {
     component: 'fa'
+  },
+  /*
+  ** Google Analytics
+  */
+  googleAnalytics: {
+    // id: process.env.GOOGLE_ANALYTICS_ID,
+    // dev: process.env.NODE_ENV == 'production'
+    id: "G-15K6L0D03G"
+  },
+  publicRuntimeConfig: {
+    googleAnalytics: {
+      // id: process.env.GOOGLE_ANALYTICS_ID,
+      // dev: process.env.NODE_ENV == 'production'
+      id: "G-15K6L0D03G"
+    }
   },
   /*
   ** Build configuration
