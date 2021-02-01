@@ -3,11 +3,6 @@ export default {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000'
   },
   /*
-  ** Nuxt rendering mode
-  ** See https://nuxtjs.org/api/configuration-mode
-  */
-  mode: 'universal',
-  /*
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
   */
@@ -50,14 +45,14 @@ export default {
   */
   buildModules: [
   ],
-  /*
+  /* 
   ** Nuxt.js modules
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     'nuxt-fontawesome',
-    '@nuxtjs/google-analytics'
+    '@nuxtjs/google-analytics',
   ],
   /*
   ** Axios module configuration
@@ -73,18 +68,14 @@ export default {
     component: 'fa'
   },
   /*
-  ** Google Analytics
+  **
   */
   googleAnalytics: {
-    // id: process.env.GOOGLE_ANALYTICS_ID,
-    // dev: process.env.NODE_ENV == 'production'
-    id: "G-15K6L0D03G"
+    id: process.env.GOOGLE_ANALYTICS_ID
   },
   publicRuntimeConfig: {
     googleAnalytics: {
-      // id: process.env.GOOGLE_ANALYTICS_ID,
-      // dev: process.env.NODE_ENV == 'production'
-      id: "G-15K6L0D03G"
+      id: process.env.GOOGLE_ANALYTICS_ID
     }
   },
   /*
