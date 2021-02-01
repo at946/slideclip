@@ -27,8 +27,8 @@
       </Button>
     </div>
 
-    <section class="my-10 mx-10">
-      <Card class="my-6">
+    <section class="mt-6 mb-4 mx-2">
+      <Card class="my-4">
         <h1 class="card-title mb-1">How to use</h1>
         <p class="mb-3">Just enter the URL and click !</p>
         <Input
@@ -42,15 +42,15 @@
         </div>
       </Card>
 
-      <Card class="my-6 backimage-slide">
+      <Card class="my-4 backimage-slide">
         <h1 class="card-title mb-1">Then, arrange slides vertically</h1>
       </Card>
 
-      <Card class="my-6">
+      <Card class="my-4">
         <h1 class="card-title mb-1">Like this <fa :icon="faHandPeace" /></h1>
       </Card>
 
-      <Card class="my-6">
+      <Card class="my-4">
         <h1 class="card-title mb-4">Developers</h1>
         <ul class="list-developers">
           <li>
@@ -182,8 +182,12 @@ export default {
 
   .developer-icon {
     font-size: 5rem;
+    @media screen and (max-width: 896px) {
+      font-size: 2.5rem;
+    }
     display: block;
     @extend .mb-2;
+    @extend .mx-auto;
   }
 
   .developer-twitter-link {

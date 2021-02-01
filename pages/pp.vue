@@ -1,5 +1,5 @@
 <template>
-  <div class="pp m-5 p-5">
+  <div class="pp p-5">
     <div class="mb-4">
       <h1 class="mb-1">Privacy policy</h1>
       <p>
@@ -115,6 +115,9 @@ ul {
 
 .pp {
   background-color: whitesmoke;
+  @media screen and (min-width: 895px) {
+    margin: 2.5rem;
+  }
 }
 
 a {

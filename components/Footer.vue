@@ -20,6 +20,7 @@ footer {
 
 .footer-menu {
   @extend .mx-1;
+  @extend .mb-1;
   display: inline-block;
 
   a:hover {

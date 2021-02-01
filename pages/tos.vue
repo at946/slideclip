@@ -1,5 +1,5 @@
 <template>
-  <div class="tos m-5 p-5">
+  <div class="tos p-5">
     <div class="mb-4">
       <h1 class="mb-1">Terms of service</h1>
       <p class="mb-4">
@@ -126,5 +126,8 @@ ul {
 
 .tos {
   background-color: whitesmoke;
+  @media screen and (min-width: 895px) {
+    margin: 2.5rem;
+  }
 }
 </style>

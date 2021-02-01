@@ -13,13 +13,15 @@
 
 .card {
   background-color: whitesmoke;
-  @extend .p-5;
+  @extend .mx-auto;
   position: relative;
+  max-width: 600px;
+  min-height: 240px;
   
   &::before {
     content: "";
     display: block;
-    padding-top: 50%;
+    padding-top: 56.25%;
   }
 
   .card-content-wrap {
@@ -35,6 +37,7 @@
     .card-content {
       width: 100%;
       text-align: center;
+      @extend .p-2;
     }
   }
 }

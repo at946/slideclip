@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div style="background-color: whitesmoke;">
     <Loading v-if="!slide_urls.length" />
-    <section class="px-10 py-6 mx-auto">
-      <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides" class="wrap-slide">
-        <img :src="url" :alt="index" class="slide my-3">
+    <section class="mx-auto py-4">
+      <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides" class="wrap-slide px-2 my-2">
+        <img :src="url" :alt="index" class="slide">
       </div>
     </section>
 
-    <section class="py-6" style="text-align: center;">
+    <section class="pb-6" style="text-align: center;">
       <Button id="btn_twitter_share" :is_twitter="true" @click="share_to_twitter">
         <fa :icon="faTwitter" class="mr-1" />Share
       </Button>
@@ -81,10 +81,11 @@ export default {
   text-align: center;
   
   .slide {
-    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
     display: inline-block;
     text-align: center;
-    max-width: 100%;
+    width: 100%;
+    max-width: 800px;
   }
 }
 </style>
