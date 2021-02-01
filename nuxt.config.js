@@ -52,13 +52,11 @@ export default {
     '@nuxtjs/google-analytics'
   ],
   googleAnalytics: {
-    id: process.env.GOOGLE_ANALYTICS_ID,
-    dev: process.env.NODE_ENV == 'production'
+    id: process.env.GOOGLE_ANALYTICS_ID
   },
   publicRuntimeConfig: {
     googleAnalytics: {
-      id: process.env.GOOGLE_ANALYTICS_ID,
-      dev: process.env.NODE_ENV == 'production'
+      id: process.env.GOOGLE_ANALYTICS_ID
     }
   },
   /*
