@@ -33,8 +33,19 @@
       </section>
 
       <section class="pb-6" style="text-align: center;">
-        <Button id="btn_twitter_share" :is_twitter="true" @click="share_to_twitter">
+        <Button id="btn_twitter_share" :is_twitter="true" @click="share_to_twitter" class="mb-2">
           <fa :icon="faTwitter" class="mr-1" />Share
+        </Button>
+        <br />
+        <Button
+          id="btn_source"
+          v-if="source"
+          :is_speaker_deck="source == 'speakerdeck'"
+          :is_slide_share="source == 'slideshare'"
+          @click="goToSource">
+          <fa :icon="faSpeakerDeck" id="icon_sd" class="mr-1" v-if="source == 'speakerdeck'" />
+          <fa :icon="faSlideshare" id="icon_ss" class="mr-1" v-if="source == 'slideshare'" />
+          Go to source
         </Button>
       </section>
     </div>
@@ -44,7 +55,7 @@
 
 <script>
 import { mapMutations } from "vuex"
-import { faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { faTwitter, faSpeakerDeck, faSlideshare } from "@fortawesome/free-brands-svg-icons"
 import Loading from "@/components/Loading.vue"
 import Input from "@/components/Input.vue"
 
@@ -53,7 +64,8 @@ export default {
     return {
       slide_urls: [],
       display_slide_url: '',
-      is_loading: true
+      is_loading: true,
+      source: ""
     }
   },
 
@@ -70,7 +82,9 @@ export default {
     err_flg: {
       get () { return this.$store.state.url.err_flg }
     },
-    faTwitter () { return faTwitter }
+    faTwitter () { return faTwitter },
+    faSpeakerDeck () { return faSpeakerDeck },
+    faSlideshare () { return faSlideshare }
   },
   
   mounted() {
@@ -84,8 +98,11 @@ export default {
     async get_slides() {
       // ローディングアニメーションを開始する
       this.is_loading = true
-      // パラメータ設定
+      // パラメータ初期化
       this.slide_urls = []
+      this.display_slide_url = ''
+      this.source = ""
+
       this.url = this.url.trim()
       this.$router.push({ query: { url: this.url } })
 
@@ -96,6 +113,12 @@ export default {
           // スライドが取得できた場合、スライドを表示する
           this.$store.commit("url/set_err_flg", false)
           this.slide_urls = slide_urls
+          this.display_slide_url = this.url
+          if (this.url.indexOf("https://speakerdeck.com/") === 0) {
+            this.source = "speakerdeck"
+          } else if (this.url.indexOf("https://www.slideshare.net/") === 0) {
+            this.source = "slideshare"
+          }
         } else {
           // スライドが取得できなかった場合、エラーメッセージを表示する
           this.$store.commit("url/set_err_flg", true)
@@ -111,6 +134,13 @@ export default {
     share_to_twitter() {
       window.open(
         "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.origin + this.$route.fullPath) + "&hashtags=slideclip",
+        "_blank"
+      )
+    },
+
+    goToSource() {
+      window.open(
+        this.display_slide_url,
         "_blank"
       )
     }

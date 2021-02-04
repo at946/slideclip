@@ -35,18 +35,34 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
     // 検証：一番下のスライドはラストページ
     await expect(slides.slice(-1)[0]).toBe('https://files.speakerdeck.com/presentations/33642807c6da4dc1a6b888f85f2ce307/slide_37.jpg?14821707')
 
-    // 検証：「Share」ボタンを選択した場合、「閲覧中のスライドのArrangeページのURL」と「#slideclip」が入力されたTwitterのShareページに遷移する
-    // Shareボタンを押下
-    await page.click("#btn_twitter_share")
+    // US：Arrangeページで、SpeakerDeckのスライドが表示されている場合、GoTo SDボタンが表示され、押下するとSpeakerDeckのスライドのページに別タブで遷移すること
+    // 検証：Arrangeページで、GoToボタンにSpeakerDeckアイコンが表示されている
+    await expect(await page.$("#btn_source > #icon_sd")).not.toBe(null)
 
-    // 検証：Tweetページに遷移している
-    // 検証：表示していたスライドのArrangeページのURLが入力されている
-    // 検証：「#slideclip」が入力されている
-    browser.once("targetcreated", async (target) => {
-      const newPage = await target.page()
-      await expect(newPage.url()).toContain("https://twitter.com/intent/tweet?url=" + encodeURIComponent(arrange_url) + "&hashtags=slideclip")
-      newPage.close()
-    })
+    // 検証：Arrangeページで、GoToボタンにSlideShareアイコンが表示されていない
+    await expect(await page.$("#btn_source > #icon_ss")).toBe(null)
+
+    // 検証：Arrangeページで、GoToボタンを押下するとSpeakerDeckのスライドページに遷移する
+    page.click("#btn_source")
+    await page.waitForTimeout(2000)
+    var pages = await browser.pages()
+    const speakerDeckPage = pages[pages.length - 1]
+    await expect(speakerDeckPage.url()).toBe(speakerdeck_url)
+
+    // US：「Share」ボタンを選択した場合、「閲覧中のスライドのArrangeページのURL」と「#slideclip」が入力されたTwitterのShareページに遷移する
+    // 検証：Arrangeページで、Twitter Shareボタンを押下すると、表示中のスライドのArrangeページのURLと「#slideclip」が入力されたTwitter Shareページに遷移する
+    page.click("#btn_twitter_share")
+    await page.waitForTimeout(2000)
+    pages = await browser.pages()
+    const twitterSharePage = pages[pages.length - 1]
+    await expect(twitterSharePage.url()).toContain("https://twitter.com/intent/tweet?url=" + encodeURIComponent(arrange_url) + "&hashtags=slideclip")
+
+    // const [twitterSharePage] = await Promise.all([
+    //   new Promise(resolve => browser.once('targetcreated', target => resolve(target.page()))),
+    //   page.click("#btn_twitter_share")
+    // ])
+    // await expect(twitterSharePage.url()).toContain("https://twitter.com/intent/tweet?url=" + encodeURIComponent(arrange_url) + "&hashtags=slideclip")
+    // twitterSharePage.close()
   })
 
   test('トップページでGoogleのURLを入力して「Arrange」ボタンを選択した場合、「The slides cannot be found...」とエラーメッセージが表示されること', async () => {

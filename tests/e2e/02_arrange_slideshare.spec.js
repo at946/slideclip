@@ -29,6 +29,20 @@ describe("ユーザーとして、SlideShareのスライドを縦読みしたい
 
     // 検証：一番下のスライドはラストページ
     await expect(slides.slice(-1)[0]).toBe("https://image.slidesharecdn.com/slideshareisjoiningscribd-200811191829/95/slideshare-is-joining-scribd-9-638.jpg?cb=1597174152")
+
+    // US：Arrangeページで、SlideShareのスライドが表示されている場合、GoTo SDボタンが表示され、押下するとSlideShareのスライドのページに別タブで遷移すること
+    // 検証：Arrangeページで、GoToボタンにSlideShareアイコンが表示されている
+    await expect(await page.$("#btn_source > #icon_ss")).not.toBe(null)
+
+    // 検証：Arrangeページで、GoToボタンにSpeakerDeckアイコンが表示されていない
+    await expect(await page.$("#btn_source > #icon_sd")).toBe(null)
+
+    // 検証：Arrangeページで、GoToボタンを押下するとSlideShareのスライドページに遷移する
+    page.click("#btn_source")
+    await page.waitForTimeout(2000)
+    const pages = await browser.pages()
+    const slideSharePage = pages[pages.length - 1]
+    await expect(slideSharePage.url()).toBe(slideshare_url)
   })
 
 })

@@ -3,6 +3,8 @@
     :id="id"
     :class="{
       'btn-twitter': is_twitter,
+      'btn-speaker-deck': is_speaker_deck,
+      'btn-slide-share': is_slide_share,
       'btn-demo' : is_demo
     }"
     v-bind:disabled="is_disabled"
@@ -15,10 +17,12 @@
 <script>
 export default {
   props: {
-    id:           { type: String },
-    is_disabled:  { type: Boolean },
-    is_twitter:   { type: Boolean },
-    is_demo:      { type: Boolean }
+    id:               { type: String },
+    is_disabled:      { type: Boolean },
+    is_twitter:       { type: Boolean },
+    is_speaker_deck:  { type: Boolean },
+    is_slide_share:   { type: Boolean },
+    is_demo:          { type: Boolean }
   }
 }
 </script>
@@ -55,5 +59,13 @@ button {
 
 .btn-twitter {
   background-color: $twitter;
+}
+
+.btn-speaker-deck {
+  background-color: $speakerDeck;
+}
+
+.btn-slide-share {
+  background-color: $slideShare;
 }
 </style>
