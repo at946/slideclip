@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="hero py-10">
+    <section class="hero pt-10 pb-4">
       <h1 class="hero-title mb-2">Arrange slides vertically for easy viewing.</h1>
       <p class="hero-description mb-4">
         The slides of the slide-sharing service can be displayed vertically side by side.<br>
@@ -12,20 +12,14 @@
         v-model="url"
         placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
       />
-      <ErrorMessage
-        msg="The slides cannot be found..."
-        class="mb-2 err_msg"
-        v-if="err_flg"
-      />
-
       <Button
         id="btn_arrange"
         :is_disabled="!url.length"
-        @click="goto_arrange"
+        @click="$router.push({ path: '/arrange', query: { url: url.trim() } })"
       >
         Arrange
       </Button>
-    </div>
+    </section>
 
     <section class="mt-6 mb-4 mx-2">
       <Card class="my-4">
@@ -113,19 +107,6 @@ export default {
 
   
     methods:  {
-    goto_arrange() {
-      this.url = this.url.trim()
-      if (
-        this.url.indexOf("https://speakerdeck.com/") === 0 ||
-        this.url.indexOf("https://www.slideshare.net/") === 0
-      ) {
-        this.$store.commit("url/set_err_flg", false)
-        this.$router.push('/arrange?url=' + this.url)
-      } else {
-        this.$store.commit("url/set_err_flg", true)
-      }
-    },
-
     share_to_twitter() {
       window.open(
         "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.origin) + "&hashtags=slideclip",

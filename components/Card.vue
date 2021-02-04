@@ -12,11 +12,12 @@
 @import "@/assets/css/_spacing.scss";
 
 .card {
-  background-color: whitesmoke;
+  background-color: white;
   @extend .mx-auto;
   position: relative;
   max-width: 600px;
   min-height: 240px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
   
   &::before {
     content: "";

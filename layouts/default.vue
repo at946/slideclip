@@ -1,7 +1,9 @@
 <template>
   <div class="body">
     <Header />
-    <main><nuxt /></main>
+    <main>
+      <nuxt />
+    </main>
     <Footer />
   </div>
 </template>
@@ -27,5 +29,6 @@ export default {
 
 main {
   flex: 1;
+  background-color: whitesmoke;
 }
 </style>

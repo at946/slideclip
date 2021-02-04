@@ -5,7 +5,7 @@ describe("ユーザーとして、存在しないURLを検索したときその�
   const slideshare_not_found_url = "https://www.slideshare.net/a"
   const err_msg = "The slides cannot be found..."
 
-  test("トップページで、SpeakerDeckドメインだがスライドが存在しない場合、トップページでエラーメッセージが表示されること", async () => {    
+  test("トップページで、SpeakerDeckドメインだがスライドが存在しない場合、Arrangeページでエラーメッセージが表示されること", async () => {    
     // トップページにアクセス
     await page.goto(root_url)
 
@@ -20,7 +20,7 @@ describe("ユーザーとして、存在しないURLを検索したときその�
 
     // 検証：トップページから遷移しない
     await page.waitForSelector(".err_msg")
-    await expect(page.url()).toBe(root_url)
+    await expect(page.url()).toBe(root_url + "arrange?url=" + encodeURIComponent(speakerdeck_not_found_url))
 
     // 検証：エラーメッセージが表示されている
     await expect(await page.$eval("body", el => el.textContent)).toContain(err_msg)
@@ -29,7 +29,7 @@ describe("ユーザーとして、存在しないURLを検索したときその�
     await expect(await page.$eval("#input_url", el => el.value)).toBe(speakerdeck_not_found_url)
   })
 
-  test("トップページで、SlideShareドメインだがスライドが存在しない場合、トップページでエラーメッセージが表示されること", async () => {
+  test("トップページで、SlideShareドメインだがスライドが存在しない場合、Arrangeページでエラーメッセージが表示されること", async () => {
     // トップページにアクセス
     await page.goto(root_url)
 
@@ -42,9 +42,9 @@ describe("ユーザーとして、存在しないURLを検索したときその�
     // Arrangeボタンを押下
     await page.click("#btn_arrange")
 
-    // 検証：トップページから遷移しない
+    // 検証：Arrangeページに遷移する
     await page.waitForSelector(".err_msg")
-    await expect(page.url()).toBe(root_url)
+    await expect(page.url()).toBe(root_url + "arrange?url=" + encodeURIComponent(slideshare_not_found_url))
 
     // 検証：エラーメッセージが表示されている
     await expect(await page.$eval("body", el => el.textContent)).toContain(err_msg)

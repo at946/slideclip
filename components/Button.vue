@@ -5,7 +5,6 @@
       'btn-twitter': is_twitter,
       'btn-demo' : is_demo
     }"
-    class="cl"
     v-bind:disabled="is_disabled"
     @click="$emit('click')"
   >
@@ -36,7 +35,7 @@ button {
   line-height: 1.5rem;
   padding: 10px 30px;
 
-  &:hover {
+  &:hover, &:focus {
     opacity: 0.75;
   }
 
@@ -49,7 +48,7 @@ button {
 
 .btn-demo {
   cursor: default;
-  &:hover {
+  &:hover, &:focus {
     opacity: 1.0;
   }
 }

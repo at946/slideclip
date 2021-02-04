@@ -33,7 +33,8 @@ export default {
 
 .input-wrap {
   @extend .mx-auto;
-  max-width: 600px;
+  max-width: 800px;
+  text-align: center;
 
   input {
     @extend .p-1;

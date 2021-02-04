@@ -16,7 +16,7 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
     
     // 検証：スライドが取得できるまでローディングアニメーションが表示される
     await page.waitForTimeout(100)
-    await expect(await page.$("#loading")).not.toBeNull()
+    await expect(await page.$("#loading")).not.toBe(null)
 
     // 検証：スライドが取得できたらローディングアニメーションは非表示になる
     await page.waitForSelector('#sec_slides')
@@ -67,7 +67,7 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
 
     // 検証：ページ遷移しない
     await page.waitForTimeout(1000)
-    await expect(page.url()).toBe(root_url)
+    await expect(page.url()).toBe(root_url + "arrange?url=" + encodeURIComponent("https://google.com"))
 
     // 検証：エラーメッセージが表示される
     text = await page.$eval('body', body => body.textContent)
