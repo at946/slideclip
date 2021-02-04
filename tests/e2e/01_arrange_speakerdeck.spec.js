@@ -2,6 +2,7 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
 
   const root_url = 'http://localhost:3000/'
   const speakerdeck_url = 'https://speakerdeck.com/kishiyyyyy/gke-case-study'
+  const arrange_url = root_url + "arrange?url=" + encodeURIComponent(speakerdeck_url)
 
   test('トップページでSpeakerDeckのURLを入力して「Arrange」ボタンを選択した場合、URL先のスライドがすべて縦方向に表示されること', async () => {
     // トップページへアクセス
@@ -13,11 +14,16 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
     // Arrangeボタンを押下
     await page.click('#btn_arrange')
     
-    // 画面遷移を待つ
+    // 検証：スライドが取得できるまでローディングアニメーションが表示される
+    await page.waitForTimeout(100)
+    await expect(await page.$("#loading")).not.toBeNull()
+
+    // 検証：スライドが取得できたらローディングアニメーションは非表示になる
     await page.waitForSelector('#sec_slides')
-    
+    await expect(await page.$("#loading")).toBe(null)
+
     // 検証：Arrangeページに遷移した
-    await expect(page.url()).toBe(root_url + 'arrange?url=https%3A%2F%2Fspeakerdeck.com%2Fkishiyyyyy%2Fgke-case-study')
+    await expect(page.url()).toBe(arrange_url)
     
     // 検証：スライドが38枚表示されている
     const slides = await page.$$eval('.slide', nodes => nodes.map(n => n.src))
@@ -28,6 +34,19 @@ describe('ユーザーとして、SpeakerDeckのスライドを縦読みした�
     
     // 検証：一番下のスライドはラストページ
     await expect(slides.slice(-1)[0]).toBe('https://files.speakerdeck.com/presentations/33642807c6da4dc1a6b888f85f2ce307/slide_37.jpg?14821707')
+
+    // 検証：「Share」ボタンを選択した場合、「閲覧中のスライドのArrangeページのURL」と「#slideclip」が入力されたTwitterのShareページに遷移する
+    // Shareボタンを押下
+    await page.click("#btn_twitter_share")
+
+    // 検証：Tweetページに遷移している
+    // 検証：表示していたスライドのArrangeページのURLが入力されている
+    // 検証：「#slideclip」が入力されている
+    browser.once("targetcreated", async (target) => {
+      const newPage = await target.page()
+      await expect(newPage.url()).toContain("https://twitter.com/intent/tweet?url=" + encodeURIComponent(arrange_url) + "&hashtags=slideclip")
+      newPage.close()
+    })
   })
 
   test('トップページでGoogleのURLを入力して「Arrange」ボタンを選択した場合、「The slides cannot be found...」とエラーメッセージが表示されること', async () => {
