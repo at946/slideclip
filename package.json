@@ -8,9 +8,8 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "test": "jest",
-    "test_e2e": "jest --config jest.e2e.config.js",
-    "test_all": "jest ./tests/components && jest --config jest.e2e.config.js ./tests/e2e",
+    "test": "jest -i",
+    "testAll": "jest -i ./tests/e2e",
     "testServer": "nuxt build && nuxt start --port 3000"
   },
   "dependencies": {
@@ -28,11 +27,7 @@
     "sass-loader": "^10.1.1"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.1.2",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^26.6.3",
     "jest": "^26.6.3",
-    "jest-puppeteer": "^4.4.0",
-    "vue-jest": "^3.0.7"
+    "jest-puppeteer": "^4.4.0"
   }
 }

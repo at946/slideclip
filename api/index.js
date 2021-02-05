@@ -3,17 +3,39 @@ const app = express()
 const scraping = require('./scraping')
 
 app.get('/slides', async(req, res) => {
-  // クエリパラメータから入力されたURLを取得。
-  // 取得したURLのクエリパラメータ以降は削除（speakerdeckはページ数をクエリパラメータで表すが1ページ目を取得したいので。
+  // クエリパラメータのurlを取得し、取得したurlのクエリパラメータを削除
   const url = req.query.url.replace(/\?.*$/, '')
+  var slide_urls = []
 
-  const slide_urls = await scraping.get_slides(url)
+  if (process.env.NODE_ENV == "production") {
+    // 本番環境
+    slide_urls = await scraping.get_slides(url)
+  } else {
+    // テスト環境
+    switch (url) {
+      case "https://speakerdeck.com/success":
+        slide_urls = [
+          "/_nuxt/assets/images/slide_image.png",
+          "/_nuxt/assets/images/slide_image.png",
+          "/_nuxt/assets/images/slide_image.png"
+        ]
+        break
+      case "https://speakerdeck.com/not_found":
+        break
+      case "https://www.slideshare.net/success":
+        slide_urls = [
+          "/_nuxt/assets/images/slide_image.png",
+          "/_nuxt/assets/images/slide_image.png"
+        ]
+        break
+      case "https:/www.slideshare.net/not_found":
+        break
+      default:
+        slide_urls = await scraping.get_slides(url)
+    }
+  }
   
   res.send(slide_urls)
-  // transcriptを使うようになったら
-  // var slide_urls, transcripts = []
-  // [slide_urls, transcripts] = await scraping.get_slides(url)
-  // res.json([slide_urls, transcripts])
 })
 
 module.exports = {

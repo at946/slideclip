@@ -2,7 +2,7 @@ const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
 
 export default {
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    baseUrl: baseUrl
   },
   /*
   ** Nuxt target

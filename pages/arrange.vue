@@ -18,7 +18,7 @@
         <div style="text-align: center;">
           <Button
             id="btn_arrange"
-            :is_disabled="!url.length || url == display_slide_url"
+            :is_disabled="!url.length"
             @click="get_slides"
           >
             Arrange
@@ -33,7 +33,13 @@
       </section>
 
       <section class="pb-6" style="text-align: center;">
-        <Button id="btn_twitter_share" :is_twitter="true" @click="share_to_twitter" class="mb-2">
+        <Button
+          id="btn_twitter_share"
+          v-if="slide_urls.length"
+          :is_twitter="true"
+          @click="share_to_twitter"
+          class="mb-2"
+        >
           <fa :icon="faTwitter" class="mr-1" />Share
         </Button>
         <br />
@@ -89,9 +95,13 @@ export default {
   
   mounted() {
     // query parameterのurlからURLをセットする
-    this.$store.commit("url/set_url", this.$route.query.url)
-    this.display_slide_url = this.url
-    this.get_slides()
+    if (this.$route.query.url) {
+      this.$store.commit("url/set_url", this.$route.query.url)
+      this.display_slide_url = this.url
+      this.get_slides()
+    } else {
+      this.$router.push("/")
+    }
   },
 
   methods: {
