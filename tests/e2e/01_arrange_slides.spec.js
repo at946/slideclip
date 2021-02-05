@@ -18,11 +18,11 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
 
     // 検証：スライドが表示されるまではローディングアニメーションが表示される
     await page.waitForTimeout(100)
-    await expect(await page.$("#loading")).not.toBeNull()
+    await expect(await page.$("#loading")).not.toBe(null)
 
     // 検証：スライドが表示されたらローディングアニメーションが消える
-    await page.waitForSelector("#sec_slides")
-    await expect(await page.$("#loading")).toBeNull()
+    await page.waitForSelector("#loading", { hidden: true })
+    await expect(await page.$("#loading")).toBe(null)
 
     // 検証：Arrangeページに遷移している
     await expect(page.url()).toBe(arrange_url(speakerdeck_url))
@@ -49,11 +49,11 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
 
     // 検証：スライドが表示されるまではローディングアニメーションが表示される
     await page.waitForTimeout(100)
-    await expect(await page.$("#loading")).not.toBeNull()
+    await expect(await page.$("#loading")).not.toBe(null)
 
     // 検証：スライドが表示されたらローディングアニメーションが消える
-    await page.waitForSelector("#sec_slides")
-    await expect(await page.$("#loading")).toBeNull()
+    await page.waitForSelector("#loading", { hidden: true })
+    await expect(await page.$("#loading")).toBe(null)
 
     // 検証：Arrangeページに遷移している
     await expect(page.url()).toBe(arrange_url(slideshare_url))

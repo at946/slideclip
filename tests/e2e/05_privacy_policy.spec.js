@@ -19,6 +19,7 @@ describe("サービス提供者として、プライバシーポリシーを伝�
   test("Arrangeページで、フッターの「privacy policy」リンクを選択した場合、PrivacyPolicyページに遷移すること", async () => {
     // Arrangeページにアクセス
     await page.goto(root_url + "arrange?url=" + encodeURIComponent("https://speakerdeck.com/success"))
+    await page.waitForSelector("#loading", { hidden: true })
 
     // フッターの「privacy policy」リンクをクリック
     await expect(await page.$eval("#link_footer_pp", el => el.textContent)).toBe("privacy policy")

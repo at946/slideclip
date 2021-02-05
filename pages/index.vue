@@ -14,7 +14,7 @@
       />
       <Button
         id="btn_arrange"
-        :is_disabled="!url.length"
+        :is_disabled="!url.trim().length"
         @click="$router.push({ path: '/arrange', query: { url: url.trim() } })"
       >
         Arrange

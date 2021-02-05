@@ -17,6 +17,7 @@ describe("logo navigation", () => {
   test("Arrangeページで、ヘッダーのロゴを選択した場合、トップページに遷移すること", async () => {
     // Arrangeページにアクセス
     await page.goto(root_url + "arrange?url=" + encodeURIComponent("https://speakerdeck.com/success"))
+    await page.waitForSelector("#loading", { hidden: true })
 
     // ヘッダーロゴをクリック
     await page.click("#logo")

@@ -1,6 +1,8 @@
 <template>
   <div style="background-color: whitesmoke; height: 100%;">
-    <Loading v-if="is_loading" />
+    <transition name="fade">
+      <Loading v-if="is_loading" />
+    </transition>
 
     <div v-if="!is_loading">
       <section class="pt-6" style="text-align: center;">
@@ -18,7 +20,7 @@
         <div style="text-align: center;">
           <Button
             id="btn_arrange"
-            :is_disabled="!url.length"
+            :is_disabled="!url.trim().length"
             @click="get_slides"
           >
             Arrange
@@ -56,14 +58,26 @@
       </section>
     </div>
 
+    <transition name="fade">
+      <CircleButton
+        id="btn_scroll_top"
+        @click="scrollToTop"
+        v-if="coordY > 200"
+      >
+        <fa :icon="faArrowUp" />
+      </CircleButton>
+    </transition>
+
   </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex"
 import { faTwitter, faSpeakerDeck, faSlideshare } from "@fortawesome/free-brands-svg-icons"
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons"
 import Loading from "@/components/Loading.vue"
 import Input from "@/components/Input.vue"
+import CircleButton from "@/components/CircleButton.vue"
 
 export default {
   data() {
@@ -71,13 +85,15 @@ export default {
       slide_urls: [],
       display_slide_url: '',
       is_loading: true,
-      source: ""
+      source: "",
+      coordY: 0
     }
   },
 
   components: {
     Loading,
-    Input
+    Input,
+    CircleButton
   },
 
   computed: {
@@ -90,7 +106,8 @@ export default {
     },
     faTwitter () { return faTwitter },
     faSpeakerDeck () { return faSpeakerDeck },
-    faSlideshare () { return faSlideshare }
+    faSlideshare () { return faSlideshare },
+    faArrowUp () { return faArrowUp }
   },
   
   mounted() {
@@ -99,6 +116,9 @@ export default {
       this.$store.commit("url/set_url", this.$route.query.url)
       this.display_slide_url = this.url
       this.get_slides()
+      this.$nextTick(() => {
+        window.addEventListener("scroll", this.handleScroll)
+      })
     } else {
       this.$router.push("/")
     }
@@ -153,6 +173,14 @@ export default {
         this.display_slide_url,
         "_blank"
       )
+    },
+
+    handleScroll() {
+      this.coordY = window.scrollY
+    },
+
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" })
     }
   }
 }
@@ -169,5 +197,12 @@ export default {
     width: 100%;
     max-width: 800px;
   }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

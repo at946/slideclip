@@ -23,7 +23,7 @@ describe("ユーザーとして、スライドが見つからないことを知�
     await expect(page.url()).toBe(arrange_url(speakerdeck_notfound_url))
 
     // 検証：スライドは表示されない
-    await expect(await page.$(".slide")).toBeNull()
+    await expect(await page.$(".slide")).toBe(null)
 
     // 検証：エラーメッセージが表示される
     const msg = await page.$eval(".err_msg", el => el.textContent)
@@ -46,7 +46,7 @@ describe("ユーザーとして、スライドが見つからないことを知�
     await expect(page.url()).toBe(arrange_url(slideshare_notfound_url))
 
     // 検証：スライドは表示されない
-    await expect(await page.$(".slide")).toBeNull()
+    await expect(await page.$(".slide")).toBe(null)
 
     // 検証：エラーメッセージが表示される
     const msg = await page.$eval(".err_msg", el => el.textContent)
@@ -69,7 +69,7 @@ describe("ユーザーとして、スライドが見つからないことを知�
     await expect(page.url()).toBe(arrange_url(google_url))
     
     // 検証：スライドは表示されない
-    await expect(await page.$(".slide")).toBeNull()
+    await expect(await page.$(".slide")).toBe(null)
 
     // 検証：エラーメッセージが表示される
     const msg = await page.$eval(".err_msg", el => el.textContent)

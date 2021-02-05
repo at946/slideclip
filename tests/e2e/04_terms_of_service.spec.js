@@ -19,6 +19,7 @@ describe("サービス提供者として、利用規約を伝えたい、なぜ�
   test("Arrangeページで、フッターの「terms of service」リンクを選択した場合、TermsOfServiceページに遷移すること", async () => {
     // Arrangeページにアクセス
     await page.goto(root_url + "arrange?url=" + encodeURIComponent("https://speakerdeck.com/success"))
+    await page.waitForSelector("#loading", { hidden: true })
 
     // フッターの「terms of service」リンクをクリック
     await expect(await page.$eval("#link_footer_tos", el => el.textContent)).toBe("terms of service")

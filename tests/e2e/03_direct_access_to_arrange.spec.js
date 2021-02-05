@@ -14,12 +14,12 @@ describe("スライドをおすすめされたユーザーとして、ダイレ�
     await page.goto(arrange_url(speakerdeck_url))
 
     // 検証：スライドが表示されること
-    await page.waitForSelector("#sec_slides")
+    await page.waitForSelector("#loading", { hidden: true })
     const slides = await page.$$eval(".slide", nodes => nodes.map(n => n.src))
     await expect(slides.length).toBe(3)
 
     // 検証：エラーメッセージが表示されないこと
-    await expect(await page.$(".err_msg")).toBeNull()
+    await expect(await page.$(".err_msg")).toBe(null)
   })
 
   test("Arrangeページで、SlideShareのURLありでダイレクトアクセスした場合、スライドが正しく表示されること", async () => {
@@ -27,12 +27,12 @@ describe("スライドをおすすめされたユーザーとして、ダイレ�
     await page.goto(arrange_url(slideshare_url))
 
     // 検証：スライドが表示されること
-    await page.waitForSelector("#sec_slides")
+    await page.waitForSelector("#loading", { hidden: true })
     const slides = await page.$$eval(".slide", nodes => nodes.map(n => n.src))
     await expect(slides.length).toBe(2)
 
     // 検証：エラーメッセージが表示されないこと
-    await expect(await page.$(".err_msg")).toBeNull()
+    await expect(await page.$(".err_msg")).toBe(null)
   })
 
   test("Arrangeページで、SpeakerDeckのNotFoundのURLありでダイレクトアクセスした場合、エラーメッセージが表示されること", async () => {
@@ -40,12 +40,12 @@ describe("スライドをおすすめされたユーザーとして、ダイレ�
     await page.goto(arrange_url(speakerdeck_notfound_url))
 
     // 検証：エラーメッセージが表示されること
-    await page.waitForSelector(".err_msg")
+    await page.waitForSelector("#loading", { hidden: true })
     const msg = await page.$eval(".err_msg", el => el.textContent)
     await expect(msg).toBe(err_msg)
 
     // 検証：スライドが表示されないこと
-    await expect(await page.$(".slide")).toBeNull()
+    await expect(await page.$(".slide")).toBe(null)
   })
 
   test("Arrangeページで、SlideShareのNotFoundのURLありでダイレクトアクセスした場合、エラーメッセージが表示されること", async () => {
@@ -53,12 +53,12 @@ describe("スライドをおすすめされたユーザーとして、ダイレ�
     await page.goto(arrange_url(slideshare_notfound_url))
 
     // 検証：エラーメッセージが表示されること
-    await page.waitForSelector(".err_msg")
+    await page.waitForSelector("#loading", { hidden: true })
     const msg = await page.$eval(".err_msg", el => el.textContent)
     await expect(msg).toBe(err_msg)
 
     // 検証：スライドが表示されないこと
-    await expect(await page.$(".slide")).toBeNull()
+    await expect(await page.$(".slide")).toBe(null)
   })
 
   test("Arrangeページで、SpeakerDeckまたはSlideShare以外のURLありでダイレクトアクセスした場合、エラーメッセージが表示されること", async () => {
@@ -66,12 +66,12 @@ describe("スライドをおすすめされたユーザーとして、ダイレ�
     await page.goto(arrange_url(google_url))
 
     // 検証：エラーメッセージが表示されること
-    await page.waitForSelector(".err_msg")
+    await page.waitForSelector("#loading", { hidden: true })
     const msg = await page.$eval(".err_msg", el => el.textContent)
     await expect(msg).toBe(err_msg)
 
     // 検証：スライドが表示されないこと
-    await expect(await page.$(".slide")).toBeNull()
+    await expect(await page.$(".slide")).toBe(null)
   })
 
   test("Arrangeページで、URLなしでダイレクトアクセスした場合、トップページにリダイレクトされること", async () => {

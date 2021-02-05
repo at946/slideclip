@@ -24,7 +24,7 @@ describe("サービス提供者として、サービスを気に入ったユー�
     await page.goto(access_url)
 
     // Shareボタンを押下
-    await page.waitForSelector("#btn_twitter_share")
+    await page.waitForSelector("#loading", { hidden: true })
     await page.click("#btn_twitter_share")
 
     // 検証：別タブでTwitterシェアページが開き、「ArrangeページのURL」と「#slideclip」が入力されていること
@@ -38,6 +38,7 @@ describe("サービス提供者として、サービスを気に入ったユー�
     // ArrangeページにスライドなしのURLでアクセス
     const access_url = arrange_url("https://speakerdeck.com/not_found")
     await page.goto(access_url)
+    await page.waitForSelector("#loading", { hidden: true })
 
     // 検証：Shareボタンがない
     await expect(await page.$("#btn_twitter_share")).toBeNull()

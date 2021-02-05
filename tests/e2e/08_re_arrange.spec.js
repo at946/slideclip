@@ -9,14 +9,13 @@ describe("色々なスライドを見たいユーザーとして、Arrangeペー
 
   // inputのvalueをclearするfunction
   async function clear_input (target) {
-    await target.focus()
     await target.click({ clickCount: 3 })
     await target.press("Backspace")
   }
 
   test("Arrangeページで表示中のスライドのソースURLがInputに入力されていること", async () => {
     // Arrangeページにアクセス
-    await  page.goto(arrange_url(speakerdeck_url))
+    await page.goto(arrange_url(speakerdeck_url))
     await page.waitForSelector("#sec_slides")
 
     // 検証：表示中のスライドのURLがテキストボックスに入力されていること
@@ -26,7 +25,7 @@ describe("色々なスライドを見たいユーザーとして、Arrangeペー
   test("ArrangeページでInputが未入力の場合、Arrangeボタンを押下できないこと", async () => {
     // Arrangeページにアクセス
     await page.goto(arrange_url(speakerdeck_url))
-    await page.waitForSelector("#sec_slides")
+    await page.waitForSelector("#loading", { hidden: true })
 
     // 検証：Arrangeボタンはdisabledではない
     await expect(await page.$eval("#btn_arrange", el => el.disabled)).toBe(false)
@@ -41,7 +40,7 @@ describe("色々なスライドを見たいユーザーとして、Arrangeペー
   test("Arrangeページで存在するSpeakerDeckまたはSlideShareのURLをInputに入力した状態でArrangeボタンを押下した場合、入力されたスライドが表示されること", async () => {
     // Arrangeページにspeakerdeck_urlでアクセス
     await page.goto(arrange_url(speakerdeck_url))
-    await page.waitForSelector("#sec_slides")
+    await page.waitForSelector("#loading", { hidden: true })
 
     // 検証：スライドが３枚表示される
     var slides = await page.$$eval(".slide", nodes => nodes.map(n => n.src))
@@ -63,7 +62,7 @@ describe("色々なスライドを見たいユーザーとして、Arrangeペー
   test("Arrangeページで存在しないSpeakerDeckまたはSlideShareのURLをInputに入力した状態でArrangeボタンを押下した場合、エラーメッセージが表示されること", async () => {
     // Arrangeページにアクセス
     await page.goto(arrange_url(speakerdeck_url))
-    await page.waitForSelector("#sec_slides")
+    await page.waitForSelector("#loading", { hidden: true })
 
     // 検証：スライドが表示される
     const slides = await page.$$eval(".slide", nodes => nodes.map(n => n.src))
@@ -88,7 +87,7 @@ describe("色々なスライドを見たいユーザーとして、Arrangeペー
   test("ArrangeページでSpeakerDeckまたはSlideShare以外のURLをInputに入力した状態でArrangeボタンを押下した場合、エラーメッセージが表示されること", async () => {
     // Arrangeページにアクセス
     await page.goto(arrange_url(speakerdeck_url))
-    await page.waitForSelector("#sec_slides")
+    await page.waitForSelector("#loading", { hidden: true })
 
     // 検証：スライドが表示される
     const slides = await page.$$eval(".slide", nodes => nodes.map(n => n.src))
