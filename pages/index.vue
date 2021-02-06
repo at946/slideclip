@@ -9,6 +9,8 @@
       <Input
         id="input_url"
         class="mb-2"
+        style="max-width: 600px;"
+        :has_clear="true"
         v-model="url"
         placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
       />

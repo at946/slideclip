@@ -10,6 +10,7 @@
           id="input_url"
           class="mb-2"
           v-model="url"
+          :has_clear="true"
           placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
         />
         <ErrorMessage
