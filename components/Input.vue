@@ -7,6 +7,7 @@
       :placeholder="placeholder"
       :readonly="is_readonly"
       @input="update_value"
+      @keydown.enter="$emit('keydown', $event)"
     />
     <fa
       :icon="faTimes"

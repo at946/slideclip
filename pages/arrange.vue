@@ -11,6 +11,7 @@
           class="mb-2"
           v-model="url"
           :has_clear="true"
+          @keydown.enter="inputEnter($event)"
           placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
         />
         <ErrorMessage
@@ -160,6 +161,12 @@ export default {
       }
       // ローディングアニメーションを終了する
       this.is_loading = false
+    },
+
+    inputEnter(event) {
+      if (event.keyCode !== 13) return
+      if (!this.url.trim().length) return
+      this.get_slides()
     },
 
     share_to_twitter() {

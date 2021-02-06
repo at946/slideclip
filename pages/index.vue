@@ -12,12 +12,13 @@
         style="max-width: 600px;"
         :has_clear="true"
         v-model="url"
+        @keydown.enter="inputEnter($event)"
         placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
       />
       <Button
         id="btn_arrange"
         :is_disabled="!url.trim().length"
-        @click="$router.push({ path: '/arrange', query: { url: url.trim() } })"
+        @click="startArrange"
       >
         Arrange
       </Button>
@@ -108,13 +109,28 @@ export default {
   },
 
   
-    methods:  {
+  methods: {
     share_to_twitter() {
       window.open(
         "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.origin) + "&hashtags=slideclip",
         "_blank"
       )
+    },
+
+    inputEnter (event) {
+      if (event.keyCode !== 13) return
+      if (!this.url.trim().length) return
+      this.startArrange()
+    },
+
+    startArrange () {
+      this.url = this.url.trim()
+      this.$router.push({
+        path: '/arrange',
+        query: { url: this.url }
+      })
     }
+
   }
 }
 </script>
