@@ -5,7 +5,7 @@
     </transition>
 
     <div v-if="!is_loading">
-      <section class="pt-6" style="text-align: center;">
+      <section class="pt-6 px-2" style="text-align: center;">
         <Input
           id="input_url"
           class="mb-2"
