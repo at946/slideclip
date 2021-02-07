@@ -31,15 +31,15 @@
       </section>
 
       <section class="mx-auto py-4">
-        <div v-for="(url, index) in slide_urls" :key="index" id="sec_slides" class="wrap-slide px-2 my-2">
-          <img :src="url" :alt="index" class="slide">
+        <div v-for="(slide, index) in slides" :key="index" id="sec_slides" class="wrap-slide px-2 my-2">
+          <img :src="slide.url" :alt="slide.transcript" class="slide">
         </div>
       </section>
 
       <section class="pb-6" style="text-align: center;">
         <Button
           id="btn_twitter_share"
-          v-if="slide_urls.length"
+          v-if="slides.length"
           :is_twitter="true"
           @click="share_to_twitter"
           class="mb-2"
@@ -84,7 +84,7 @@ import CircleButton from "@/components/CircleButton.vue"
 export default {
   data() {
     return {
-      slide_urls: [],
+      slides: [],
       display_slide_url: '',
       is_loading: true,
       source: "",
@@ -131,7 +131,7 @@ export default {
       // ローディングアニメーションを開始する
       this.is_loading = true
       // パラメータ初期化
-      this.slide_urls = []
+      this.slides = []
       this.display_slide_url = ''
       this.source = ""
 
@@ -140,11 +140,12 @@ export default {
 
       if ( this.url.indexOf("https://speakerdeck.com/") === 0 || this.url.indexOf("https://www.slideshare.net/") === 0) {
         // SpeakerDeck or SlideShareのURLの場合、スライドをスクレイピングする
-        const slide_urls = await this.$axios.$get("/api/slides", { params: { url: this.url } })
-        if (slide_urls.length) {
+        const slides = await this.$axios.$get("/api/slides", { params: { url: this.url } })
+        console.log(slides)
+        if (slides.length) {
           // スライドが取得できた場合、スライドを表示する
           this.$store.commit("url/set_err_flg", false)
-          this.slide_urls = slide_urls
+          this.slides = slides
           this.display_slide_url = this.url
           if (this.url.indexOf("https://speakerdeck.com/") === 0) {
             this.source = "speakerdeck"
