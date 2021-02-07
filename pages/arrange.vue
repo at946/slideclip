@@ -141,7 +141,6 @@ export default {
       if ( this.url.indexOf("https://speakerdeck.com/") === 0 || this.url.indexOf("https://www.slideshare.net/") === 0) {
         // SpeakerDeck or SlideShareのURLの場合、スライドをスクレイピングする
         const slides = await this.$axios.$get("/api/slides", { params: { url: this.url } })
-        console.log(slides)
         if (slides.length) {
           // スライドが取得できた場合、スライドを表示する
           this.$store.commit("url/set_err_flg", false)

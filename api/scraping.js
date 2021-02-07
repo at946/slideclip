@@ -57,19 +57,32 @@ async function get_slideshare_slides(page) {
     const slides = []
     
     // スライドの要素を取得
-    const el_slides = document.getElementsByClassName("slide_image")
+    const el_slide_images = document.getElementsByClassName("slide_image")
 
-    // スライド要素が存在する（NotFoundでない）場合、スライドの情報を取得する
-    if (el_slides.length) {
+    if (el_slide_images.length) {
+      // スライドが存在するページの場合
+      // transcriptの要素を取得
       const el_transcripts = document.getElementsByClassName("transcripts")[0].getElementsByTagName("li")
-      for (var i = 0; i < el_slides.length; i++) {
-        // slide_url_elements配下のimageタグの data-normal 属性のURLを取得
-        slides.push(
-          {
-            url: el_slides[i].dataset.full,
-            transcript: el_transcripts[i].innerText
-          }
-        )
+      if (el_slide_images.length === el_transcripts.length) {
+        // スライドとTranscriptの数が一致している場合、imageUrlとtranscriptを取得
+        for (let i = 0; i < el_slide_images.length; i++) {
+          slides.push(
+            {
+              url: el_slide_images[i].dataset.full,
+              transcript: el_transcripts[i].innerText
+            }
+          )
+        }
+      } else {
+        // スライドとTranscriptの数が一致しない場合、imageUrlとaltを取得
+        for (let i = 0; i < el_slide_images.length; i++) {
+          slides.push(
+            {
+              url: el_slide_images[i].dataset.full,
+              transcript: el_slide_images[i].alt
+            }
+          )
+        }
       }
     }
   

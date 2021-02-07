@@ -22,7 +22,6 @@ describe("#input_urlでEnterでArrangeできる", () => {
 
     // 検証：スライドが表示されている
     const slidesLength = await page.$$eval(".slide", nodes => nodes.length)
-    await page.screenshot({ path: "tests/a.png"})
     await expect(slidesLength).toBe(3)
   })
 
