@@ -31,7 +31,7 @@
       </section>
 
       <section class="mx-auto py-4">
-        <div v-for="(slide, index) in slides" :key="index" id="sec_slides" class="wrap-slide px-2 my-4">
+        <div v-for="(slide, index) in slides" :key="index" id="sec_slides" class="wrap-slide">
           <img :src="slide.url" :alt="slide.transcript" class="slide">
         </div>
       </section>
@@ -195,8 +195,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/css/_spacing.scss";
+
 .wrap-slide {
   text-align: center;
+  @extend .px-2;
+  @media screen and (max-width: 896px) {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media screen and (min-width: 896px) {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
   
   .slide {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
