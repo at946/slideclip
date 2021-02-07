@@ -31,7 +31,7 @@
       </section>
 
       <section class="mx-auto py-4">
-        <div v-for="(slide, index) in slides" :key="index" id="sec_slides" class="wrap-slide px-2 my-2">
+        <div v-for="(slide, index) in slides" :key="index" id="sec_slides" class="wrap-slide px-2 my-4">
           <img :src="slide.url" :alt="slide.transcript" class="slide">
         </div>
       </section>
