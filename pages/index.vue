@@ -11,13 +11,13 @@
         class="mb-2"
         style="max-width: 600px;"
         :has_clear="true"
-        v-model="url"
+        v-model="search_url"
         @keydown.enter="inputEnter($event)"
         placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
       />
       <Button
         id="btn_arrange"
-        :is_disabled="!url.trim().length"
+        :is_disabled="!search_url.trim().length"
         @click="startArrange"
       >
         Arrange
@@ -82,19 +82,10 @@ import { faUserCircle } from "@fortawesome/free-regular-svg-icons"
 import { faHandPeace } from "@fortawesome/free-regular-svg-icons"
 
 export default {
-  data() {
-    return {
-      slide_urls: []
-    }
-  },
-
   computed: {
-    url: {
-      get () { return this.$store.state.url.url },
-      set (value) { this.$store.commit("url/set_url", value) }
-    },
-    err_flg: {
-      get () { return this.$store.state.url.err_flg },
+    search_url: {
+      get () { return this.$store.state.search.url },
+      set (value) { this.$store.commit("search/set_url", value) }
     },
     faTwitter () { return faTwitter },
     faUserCircle () { return faUserCircle },
@@ -112,22 +103,22 @@ export default {
   methods: {
     share_to_twitter() {
       window.open(
-        "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.origin) + "&hashtags=slideclip",
+        "https://twitter.com/intent/tweet?text=" + encodeURIComponent("#slideclip") + "&url=" + encodeURIComponent(window.location.origin),
         "_blank"
       )
     },
 
     inputEnter (event) {
       if (event.keyCode !== 13) return
-      if (!this.url.trim().length) return
+      if (!this.search_url.trim().length) return
       this.startArrange()
     },
 
     startArrange () {
-      this.url = this.url.trim()
+      this.search_url = this.search_url.trim()
       this.$router.push({
         path: '/arrange',
-        query: { url: this.url }
+        query: { url: this.search_url }
       })
     }
 

@@ -2,7 +2,7 @@ describe("サービス提供者として、サービスを気に入ったユー�
 
   const root_url = "http://localhost:3000/"
   const arrange_url = (url) => root_url + "arrange?url=" + encodeURIComponent(url)
-  const twitter_share_url = (url) => "https://twitter.com/intent/tweet?url=" + encodeURIComponent(url) + "&hashtags=slideclip"
+  const twitter_share_url = (title, url) => "https://twitter.com/intent/tweet?text=" + title + "\n%23slideclip&url=" + encodeURIComponent(url)
 
   test("トップページで、「Share」ボタンを選択した場合、「トップページのURL」と「#slideclip」が入力されたTwitterのShareページに遷移すること", async () => {
     // トップページにアクセス
@@ -15,7 +15,7 @@ describe("サービス提供者として、サービスを気に入ったユー�
     await page.waitForTimeout(2000)
     const pages = await browser.pages()
     const newPage = pages[pages.length - 1]
-    await expect(newPage.url()).toBe(twitter_share_url("http://localhost:3000"))
+    await expect(newPage.url()).toBe("https://twitter.com/intent/tweet?text=%23slideclip&url=" + encodeURIComponent("http://localhost:3000"))
   })
 
   test("Arrangeページで、「Share」ボタンを選択した場合、「閲覧中のスライドのArrangeページのURL」と「#slideclip」が入力されたTwitterのShareページに遷移すること", async () => {
@@ -31,7 +31,7 @@ describe("サービス提供者として、サービスを気に入ったユー�
     await page.waitForTimeout(2000)
     const pages = await browser.pages()
     const newPage = pages[pages.length - 1]
-    await expect(newPage.url()).toBe(twitter_share_url(access_url))
+    await expect(newPage.url()).toBe("https://twitter.com/intent/tweet?text=" + encodeURIComponent("\"Success SpeakerDeck\"\n#slideclip") + "&url=" + encodeURIComponent(access_url))
   })
 
   test("Arrangeページで、スライドが表示されていない場合、「Share」ボタンが表示されないこと", async () => {
@@ -43,4 +43,5 @@ describe("サービス提供者として、サービスを気に入ったユー�
     // 検証：Shareボタンがない
     await expect(await page.$("#btn_twitter_share")).toBeNull()
   })
+
 })

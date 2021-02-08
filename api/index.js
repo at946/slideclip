@@ -5,37 +5,45 @@ const scraping = require('./scraping')
 app.get('/slides', async(req, res) => {
   // クエリパラメータのurlを取得し、取得したurlのクエリパラメータを削除
   const url = req.query.url.replace(/\?.*$/, '')
-  var slides = []
-
+  var result = null
+ 
   if (process.env.NODE_ENV == "production") {
     // 本番環境
-    slides = await scraping.get_slides(url)
+    result = await scraping.get_slides(url)
   } else {
     // テスト環境
     switch (url) {
       case "https://speakerdeck.com/success":
-        slides = [
-          { url: "/_nuxt/assets/images/slide_image.png", alt: 1 },
-          { url: "/_nuxt/assets/images/slide_image.png", alt: 2 },
-          { url: "/_nuxt/assets/images/slide_image.png", alt: 3 }
-        ]
+        result = {
+          title: "Success SpeakerDeck",
+          source_id: 1,
+          slides: [
+            { url: "/_nuxt/assets/images/slide_image.png", alt: 1 },
+            { url: "/_nuxt/assets/images/slide_image.png", alt: 2 },
+            { url: "/_nuxt/assets/images/slide_image.png", alt: 3 }
+          ]
+        }
+        break
+      case "https://www.slideshare.net/success":
+        result = {
+          title: "Success SlideShare",
+          source_id: 2,
+          slides: [
+            { url: "/_nuxt/assets/images/slide_image.png", alt: 1 },
+            { url: "/_nuxt/assets/images/slide_image.png", alt: 2 }
+          ]
+        }
         break
       case "https://speakerdeck.com/not_found":
         break
-      case "https://www.slideshare.net/success":
-        slides = [
-          { url: "/_nuxt/assets/images/slide_image.png", alt: 1 },
-          { url: "/_nuxt/assets/images/slide_image.png", alt: 2 }
-        ]
-        break
-      case "https:/www.slideshare.net/not_found":
+      case "https://www.slideshare.net/not_found":
         break
       default:
-        slides = await scraping.get_slides(url)
+        result = await scraping.get_slides(url)
     }
   }
   
-  res.send(slides)
+  res.send(result)
 })
 
 module.exports = {
