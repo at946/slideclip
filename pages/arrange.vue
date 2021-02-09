@@ -1,48 +1,44 @@
 <template>
-  <div style="background-color: whitesmoke; height: 100%;">
+  <div>
     <transition name="fade">
-      <Loading v-if="is_loading" />
+      <Loading v-if="isLoading" />
     </transition>
 
-    <div v-if="!is_loading">
-      <section class="pt-6 px-2" style="text-align: center;">
+    <div v-if="!isLoading">
+      <section class="pt-6 px-2 text-center">
         <Input
           id="input_url"
           class="mb-2"
-          v-model="search_url"
-          :has_clear="true"
-          @keydown.enter="inputEnter($event)"
-          @keydown.right="alert('hello')"
+          v-model="searchUrl"
+          :hasClear="true"
+          @keydown.enter.exact="inputEnter($event)"
           placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
         />
         <ErrorMessage
           msg="The slides cannot be found..."
           class="mb-2 err_msg"
-          v-if="has_error"
+          v-if="hasError"
         />
-        <div style="text-align: center;">
-          <Button
-            id="btn_arrange"
-            :is_disabled="!search_url.trim().length"
-            @click="get_slides"
-          >
-            Arrange
-          </Button>
+        <Button
+          id="btn_arrange"
+          :isDisabled="!searchUrl.trim().length"
+          @click="getSlides"
+        >
+          Arrange
+        </Button>
+      </section>
+
+      <section class="mx-auto py-4" v-if="!hasError">
+        <div v-for="(slide, index) in displaySlides.images" :key="index" id="sec_slides" class="wrap-slide text-center mx-2">
+          <img :src="slide.url" :alt="slide.alt" :id="'slide_' + index" class="slide" tabindex=0>
         </div>
       </section>
 
-      <section class="mx-auto py-4">
-        <div v-for="(slide, index) in display_slides" :key="index" id="sec_slides" class="wrap-slide">
-          <img :src="slide.url" :alt="slide.transcript" :id="'slide_' + index" class="slide" tabindex=0>
-        </div>
-      </section>
-
-      <section class="pb-6" style="text-align: center;">
+      <section class="pb-6 text-center" v-if="!hasError">
         <Button
           id="btn_twitter_share"
-          v-if="display_slides.length"
-          :is_twitter="true"
-          @click="share_to_twitter"
+          :isTwitter="true"
+          @click="shareToTwitter"
           class="mb-2"
         >
           <fa :icon="faTwitter" class="mr-1" />Share
@@ -50,13 +46,12 @@
         <br />
         <Button
           id="btn_source"
-          v-if="display_slide_source_id"
-          :is_speaker_deck="display_slide_source_id === 1"
-          :is_slide_share="display_slide_source_id === 2"
+          :isSpeakerDeck="displaySlides.sourceId === 1"
+          :isSlideShare="displaySlides.sourceId === 2"
           @click="goToSource"
         >
-          <fa :icon="faSpeakerDeck" id="icon_sd" class="mr-1" v-if="display_slide_source_id === 1" />
-          <fa :icon="faSlideshare" id="icon_ss" class="mr-1" v-if="display_slide_source_id === 2" />
+          <fa :icon="faSpeakerDeck" id="icon_sd" class="mr-1" v-if="displaySlides.sourceId === 1" />
+          <fa :icon="faSlideshare" id="icon_ss" class="mr-1" v-if="displaySlides.sourceId === 2" />
           Go to source
         </Button>
       </section>
@@ -76,7 +71,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex"
 import { faTwitter, faSpeakerDeck, faSlideshare } from "@fortawesome/free-brands-svg-icons"
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons"
 import Loading from "@/components/Loading.vue"
@@ -86,13 +80,18 @@ import CircleButton from "@/components/CircleButton.vue"
 export default {
   data() {
     return {
-      display_slides: [],
-      display_slide_url: '',
-      display_slide_title: '',
-      display_slide_source_id: 0,  // 1: speakerdeck, 2: slideshare
-      is_loading: true,
-      has_error: false,
-      coordY: 0
+      isLoading: true,
+      hasError: false,
+      coordY: 0,
+      displaySlides: {
+        // source_id: Integer [ 1 SpeakerDeck, 2 SlideShare ],
+        // url: String,
+        // title: String,
+        // images: [{
+          // url: String,
+          // alt: String
+        // }]
+      },
     }
   },
 
@@ -103,7 +102,7 @@ export default {
   },
 
   computed: {
-    search_url: {
+    searchUrl: {
       get () { return this.$store.state.search.url },
       set (value) { this.$store.commit("search/set_url", value) }
     },
@@ -116,9 +115,8 @@ export default {
   mounted() {
     if (this.$route.query.url) {
       // query parameterのurlがある場合、
-      this.search_url = this.$route.query.url.trim() // query parameterのurlからURLをセット
-      this.get_slides() // スライドをスクレイピング
-
+      this.searchUrl = this.$route.query.url.trim() // query parameterのurlからURLをセット
+      this.getSlides() // スライドをスクレイピング
       this.$nextTick(() => {
         // EventListenerを登録
         window.addEventListener("scroll", this.handleScroll)
@@ -142,59 +140,52 @@ export default {
   },
 
   methods: {
-    async get_slides() {
-      // ローディングアニメーションを開始する
-      this.is_loading = true
-      // パラメータ初期化
-      this.display_slides = []
-      this.display_slide_url = ''
-      this.display_slide_source_id = 0
+    async getSlides() {
+      this.isLoading = true // ローディングアニメーションを開始する
+      this.displaySlides = {} // パラメータ初期化
 
-      this.search_url = this.search_url.trim()
-      this.$router.push({ query: { url: this.search_url } })
+      this.searchUrl = this.searchUrl.trim()
+      this.$router.push({ query: { url: this.searchUrl } })
 
       if (
-        this.search_url.indexOf("https://speakerdeck.com/") === 0 ||
-        this.search_url.indexOf("https://www.slideshare.net/") === 0
+        this.searchUrl.indexOf("https://speakerdeck.com/") === 0 ||
+        this.searchUrl.indexOf("https://www.slideshare.net/") === 0
       ) {
         // SpeakerDeck or SlideShareのURLの場合、スライドをスクレイピングする
-        const res = await this.$axios.$get("/api/slides", { params: { url: this.search_url } })
+        this.displaySlides = await this.$axios.$get("/api/slides", { params: { url: this.searchUrl } })
 
-        if (res && res.slides.length) {
+        if (Object.keys(this.displaySlides).length) {
           // スライドが取得できた場合、スライドを表示する
-          this.has_error = false
-          this.display_slide_url = this.search_url
-          this.display_slide_title = res.title
-          this.display_slide_source_id = res.source_id
-          this.display_slides = res.slides
+          this.hasError = false
         } else {
           // スライドが取得できなかった場合、エラーメッセージを表示する
-          this.has_error = true
+          this.hasError = true
         }
       } else {
         // SpeakerDeck or SlideShareのURLでない場合、エラーメッセージを表示する
-        this.has_error = true
+        this.hasError = true
       }
       // ローディングアニメーションを終了する
-      this.is_loading = false
+      this.isLoading = false
     },
 
     inputEnter(event) {
-      if (event.key !== "Enter") return
-      if (!this.search_url.trim().length) return
-      this.get_slides()
+      if (event.keyCode !== 13) return // IME確定時は発火しない
+      this.searchUrl = this.searchUrl.trim()
+      if (!this.searchUrl.length) return
+      this.getSlides()
     },
 
-    share_to_twitter() {
+    shareToTwitter() {
       window.open(
-        "https://twitter.com/intent/tweet?text=" + encodeURIComponent("\"" + this.display_slide_title + "\"\n#slideclip") +  "&url=" + encodeURIComponent(window.location.origin + this.$route.fullPath),
+        "https://twitter.com/intent/tweet?text=" + encodeURIComponent("\"" + this.displaySlides.title + "\"\n#slideclip") + "&url=" + encodeURIComponent(window.location.origin + this.$route.fullPath),
         "_blank"
       )
     },
 
     goToSource() {
       window.open(
-        this.display_slide_url,
+        this.displaySlides.url,
         "_blank"
       )
     },
@@ -208,8 +199,10 @@ export default {
     },
 
     handleKeydown(e) {
-      // いずれかの要素がfocusされている場合は動かない
-      if (e.target.tagName !== "BODY") return
+      // 「→」「←」がタイプされたときにスライドをスクロールする
+
+      if (e.target.tagName !== "BODY") return // いずれかの要素がfocusされている場合は動かない
+      if (this.hasError) return // スライドが取得できていない場合は動かない
 
       switch (e.key) {
         case "ArrowLeft":
@@ -226,32 +219,28 @@ export default {
     scrollToPrev() {
       var slideCoordY = 0
       // 後ろのスライドから順にy座標を取得し、今のスクロール位置より下のスライドが現れたらそのスライドにスクロールする
-      for (let i = this.display_slides.length; i > 0; i--) {
-        slideCoordY = document.getElementById("slide_" + (i - 1)).getBoundingClientRect().y + window.pageYOffset
+      for (let i = this.displaySlides.images.length; i > 0; i--) {
+        slideCoordY = document.getElementById('slide_' + (i - 1)).getBoundingClientRect().y + window.pageYOffset
         if (this.coordY > slideCoordY) break
       }
-      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: "smooth" }) }, 0)
+      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: 'smooth' }) }, 0)
     },
 
     scrollToNext() {
       // 前のスライドから順にy座標を取得し、今のスクロール位置より上のスライドが現れたらそのスライドにスクロールする
       var slideCoordY = 0
-      for (let i = 0; i < this.display_slides.length; i++) {
-        slideCoordY = document.getElementById("slide_" + i).getBoundingClientRect().y + window.pageYOffset
+      for (let i = 0; i < this.displaySlides.images.length; i++) {
+        slideCoordY = document.getElementById('slide_' + i).getBoundingClientRect().y + window.pageYOffset
         if (this.coordY < slideCoordY) break
       }
-      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: "smooth" }) }, 0)
+      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: 'smooth' }) }, 0)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/css/_spacing.scss";
-
 .wrap-slide {
-  text-align: center;
-  @extend .px-2;
   @media screen and (max-width: 896px) {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -263,8 +252,6 @@ export default {
   
   .slide {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
-    display: inline-block;
-    text-align: center;
     width: 100%;
     max-width: 800px;
   }

@@ -114,7 +114,6 @@ ul {
 }
 
 .pp {
-  background-color: whitesmoke;
   @media screen and (min-width: 895px) {
     margin: 2.5rem;
   }

@@ -1,10 +1,8 @@
 const puppeteer = require('puppeteer')
 
-async function get_slides(url) {
+async function getSlides(url) {
   // 変数初期化
-  var title = null
-  var source_id = null // 0: speakerdeck, 1: slideshare
-  var slides = null
+  const slides = {}
 
   // puppeteerの開始
   const browser = await puppeteer.launch({
@@ -16,95 +14,101 @@ async function get_slides(url) {
   const page = await browser.newPage()
   await page.goto(url)
 
-  // サービスごとにスライドを取得
-  var title = ''
-  var slides = []
   if (url.indexOf("https://speakerdeck.com/") === 0) {
     // URLがSpeakerDeckドメインの場合
-    [ title, slides ] = await get_speakerdeck_slides(page)
-    source_id = 1
+    const res = await getSpeakerDeckSlides(page)
+    if (res.isFound) {
+      slides.sourceId = 1
+      slides.title = res.title
+      slides.url = url
+      slides.images = res.images
+    }
   } else if ( url.indexOf("https://www.slideshare.net") === 0) {
     // URLがSlideShareドメインの場合
-    [ title, slides ] = await get_slideshare_slides(page)
-    source_id = 2
+    const res = await getSlideShareSlides(page)
+    if (res.isFound) {
+      slides.sourceId = 2
+      slides.title = res.title
+      slides.url = url
+      slides.images = res.images
+    }
   }
 
   // puppeteerの終了
   await browser.close()
-  // console.log("title: " + title)
-  return { title: title, source_id: source_id, slides: slides }
+
+  return slides
 }
 
 // SpeakerDeckの場合
-async function get_speakerdeck_slides(page) {
+async function getSpeakerDeckSlides(page) {
   return await page.evaluate(() => {
-    var title = ''
-    const slides = []
+    var isFound = false, title
+    const images = []
 
     // Transcriptからスライド画像を取得する
     const transcript = document.getElementsByClassName("transcript")[0]
 
     if (transcript) {
+      // スライドが表示されているページの場合
+      isFound = true
       title = document.getElementsByClassName("deck-header-title")[0].innerText
-      console.log("title: " + title)
       const list = transcript.getElementsByTagName("li")
       for (let i = 0; i < list.length; i++) {
-        slides.push(
+        images.push(
           {
             url: list[i].getElementsByTagName("a")[0].href,
-            transcript: list[i].innerText
+            alt: list[i].innerText
           }
         )
       }
     }
-    console.log("slides: " + slides)
-    // スライドがある場合はスライド画像のURLの配列、ない場合は空の配列を返却する
-    return [ title, slides ]
+
+    return { isFound: isFound, title: title, images: images }
   })
 }
 
-async function get_slideshare_slides(page) {
+async function getSlideShareSlides(page) {
   return await page.evaluate(() => {
-    var title = ''
-    const slides = []
+    var isFound = false, title
+    const images = []
     
     // スライドの要素を取得
     const el_slide_images = document.getElementsByClassName("slide_image")
 
     if (el_slide_images.length) {
-      // スライドが存在するページの場合
-      // titleを取得
+      // スライドが表示されているページの場合
+      isFound = true
       title = document.getElementsByClassName("j-title-breadcrumb")[0].innerText
-      // transcriptの要素を取得
+      // alt用にtranscriptの要素を取得
       const el_transcripts = document.getElementsByClassName("transcripts")[0].getElementsByTagName("li")
       if (el_slide_images.length === el_transcripts.length) {
         // スライドとTranscriptの数が一致している場合、imageUrlとtranscriptを取得
         for (let i = 0; i < el_slide_images.length; i++) {
-          slides.push(
+          images.push(
             {
               url: el_slide_images[i].dataset.full,
-              transcript: el_transcripts[i].innerText
+              alt: el_transcripts[i].innerText
             }
           )
         }
       } else {
         // スライドとTranscriptの数が一致しない場合、imageUrlとaltを取得
         for (let i = 0; i < el_slide_images.length; i++) {
-          slides.push(
+          images.push(
             {
               url: el_slide_images[i].dataset.full,
-              transcript: el_slide_images[i].alt
+              alt: el_slide_images[i].alt
             }
           )
         }
       }
     }
   
-    // スライドがある場合はスライド画像のURLの配列、ない場合は空の配列を返却する
-    return [ title, slides ]
+    return { isFound: isFound, title: title, images: images }
   })
 }
 
 module.exports = {
-  get_slides
+  getSlides
 }

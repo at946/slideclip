@@ -5,13 +5,14 @@
       type="text"
       :value="value"
       :placeholder="placeholder"
-      :readonly="is_readonly"
-      @input="update_value"
+      :autofocus="isAutoFocus"
+      :readonly="isReadonly"
+      @input="updateValue"
       @keydown.enter="$emit('keydown', $event)"
     />
     <fa
       :icon="faTimes"
-      v-if="has_clear"
+      v-if="hasClear"
       class="clear"
       @click="clear"
     />
@@ -26,8 +27,9 @@ export default {
     id:           { type: String },
     value:        { type: String },
     placeholder:  { type: String },
-    is_readonly:  { type: Boolean },
-    has_clear:    { type: Boolean }
+    isAutoFocus:  { type: Boolean },
+    isReadonly:   { type: Boolean },
+    hasClear:     { type: Boolean }
   },
 
   computed: {
@@ -35,12 +37,13 @@ export default {
   },
 
   methods: {
-    update_value(e) {
+    updateValue(e) {
       this.$emit("input", e.target.value)
     },
 
     clear() {
       this.$emit("input", "")
+      document.getElementById(this.id).focus()
     }
   }
 }

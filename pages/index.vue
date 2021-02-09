@@ -1,23 +1,23 @@
 <template>
   <div>
-    <section class="hero pt-10 pb-4">
+    <section class="hero pt-10 pb-4 text-center mx-2">
       <h1 class="hero-title mb-2">Arrange slides vertically for easy viewing.</h1>
       <p class="hero-description mb-4">
-        The slides of the slide-sharing service can be displayed vertically side by side.<br>
-        Enter the URL of SlideShare or SpeakerDeck.
+        The slides of the slide-sharing service can be displayed vertically side by side.
+        <br />
+        Enter the URL of <a href="https://www.slideshare.net/" target="_blank" class="text-slide-share">SlideShare</a> or <a href="https://speakerdeck.com/" target="_blank" class="text-speaker-deck">SpeakerDeck</a>.
       </p>
       <Input
         id="input_url"
-        class="mb-2"
-        style="max-width: 600px;"
-        :has_clear="true"
-        v-model="search_url"
+        class="mb-2 hero-input"
+        :hasClear="true"
+        v-model="searchUrl"
         @keydown.enter="inputEnter($event)"
         placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
       />
       <Button
         id="btn_arrange"
-        :is_disabled="!search_url.trim().length"
+        :isDisabled="!searchUrl.trim().length"
         @click="startArrange"
       >
         Arrange
@@ -25,29 +25,33 @@
     </section>
 
     <section class="mt-6 mb-4 mx-2">
-      <Card class="my-4">
-        <h1 class="card-title mb-1">How to use</h1>
-        <p class="mb-3">Just enter the URL and click !</p>
+      <Card class="card">
+        <h2 class="card-title">How to use</h2>
+      </Card>
+
+      <Card class="card">
+        <h1 class="card-title mb-3">Just enter the URL and click !</h1>
         <Input
           class="mb-3"
+          id="input_url_demo"
           value="https://speakerdeck.com/kishiyyyyy/gke-case-study"
-          :is_readonly="true"
+          :isReadonly="true"
         />
         <div class="touch-button-wrap">
-          <Button :is_demo="true">Arrange</Button>
+          <Button :isDemo="true">Arrange</Button>
           <img src="@/assets/images/touch_icon.png" alt="touch icon">
         </div>
       </Card>
 
-      <Card class="my-4 backimage-slide">
-        <h1 class="card-title mb-1">Then, arrange slides vertically</h1>
+      <Card class="card backimage-slide">
+        <h1 class="card-title">Then, arrange slides vertically</h1>
       </Card>
 
-      <Card class="my-4">
-        <h1 class="card-title mb-1">Like this <fa :icon="faHandPeace" /></h1>
+      <Card class="card">
+        <h1 class="card-title">Like this <fa :icon="faHandPeace" /></h1>
       </Card>
 
-      <Card class="my-4">
+      <Card class="card">
         <h1 class="card-title mb-4">Developers</h1>
         <ul class="list-developers">
           <li>
@@ -61,9 +65,9 @@
         </ul>
       </Card>
 
-      <Card>
+      <Card class="card">
         <h1 class="card-title mb-3">Share if you like !!</h1>
-        <Button id="btn_twitter_share" :is_twitter="true" @click="share_to_twitter">
+        <Button id="btn_twitter_share" :isTwitter="true" @click="shareToTwitter">
           <fa :icon="faTwitter" class="mr-1" />Share
         </Button>
       </Card>
@@ -72,7 +76,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex"
 import Input from "@/components/Input.vue"
 import Button from "@/components/Button.vue"
 import Card from "@/components/Card.vue"
@@ -83,7 +86,7 @@ import { faHandPeace } from "@fortawesome/free-regular-svg-icons"
 
 export default {
   computed: {
-    search_url: {
+    searchUrl: {
       get () { return this.$store.state.search.url },
       set (value) { this.$store.commit("search/set_url", value) }
     },
@@ -101,27 +104,27 @@ export default {
 
   
   methods: {
-    share_to_twitter() {
-      window.open(
-        "https://twitter.com/intent/tweet?text=" + encodeURIComponent("#slideclip") + "&url=" + encodeURIComponent(window.location.origin),
-        "_blank"
-      )
-    },
-
     inputEnter (event) {
       if (event.keyCode !== 13) return
-      if (!this.search_url.trim().length) return
+      this.searchUrl = this.searchUrl.trim()
+      if (!this.searchUrl.length) return
       this.startArrange()
     },
 
     startArrange () {
-      this.search_url = this.search_url.trim()
+      this.searchUrl = this.searchUrl.trim()
       this.$router.push({
         path: '/arrange',
-        query: { url: this.search_url }
+        query: { url: this.searchUrl }
       })
-    }
+    },
 
+    shareToTwitter() {
+      window.open(
+        "https://twitter.com/intent/tweet?text=" + encodeURIComponent("#slideclip") + "&url=" + encodeURIComponent(window.location.origin),
+        "_blank"
+      )
+    }
   }
 }
 </script>
@@ -131,9 +134,6 @@ export default {
 @import "@/assets/css/_color.scss";
 
 .hero {
-  padding: 1rem;
-  text-align: center;
-  background-color: whitesmoke;
 
   .hero-title {
     font-size: 2rem;
@@ -142,6 +142,21 @@ export default {
 
   .hero-description {
     line-height: 1.4rem;
+  }
+
+  .hero-input {
+    max-width: 600px;
+  }
+}
+
+.card {
+  @media screen and (max-width: 896px) {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media screen and (min-width: 896px) {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 }
 

@@ -97,7 +97,7 @@
       </p>
     </div>
 
-    <p style="text-align: right;">以上</p>
+    <p class="text-right">以上</p>
   </div>
 </template>
 
@@ -125,7 +125,6 @@ ul {
 }
 
 .tos {
-  background-color: whitesmoke;
   @media screen and (min-width: 895px) {
     margin: 2.5rem;
   }

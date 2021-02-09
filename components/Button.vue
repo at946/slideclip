@@ -2,12 +2,12 @@
   <button
     :id="id"
     :class="{
-      'btn-twitter': is_twitter,
-      'btn-speaker-deck': is_speaker_deck,
-      'btn-slide-share': is_slide_share,
-      'btn-demo' : is_demo
+      'btn-twitter': isTwitter,
+      'btn-speaker-deck': isSpeakerDeck,
+      'btn-slide-share': isSlideShare,
+      'btn-demo' : isDemo
     }"
-    v-bind:disabled="is_disabled"
+    v-bind:disabled="isDisabled"
     @click="$emit('click')"
   >
     <slot />
@@ -17,12 +17,12 @@
 <script>
 export default {
   props: {
-    id:               { type: String },
-    is_disabled:      { type: Boolean },
-    is_twitter:       { type: Boolean },
-    is_speaker_deck:  { type: Boolean },
-    is_slide_share:   { type: Boolean },
-    is_demo:          { type: Boolean }
+    id:             { type: String },
+    isDisabled:     { type: Boolean },
+    isTwitter:      { type: Boolean },
+    isSpeakerDeck:  { type: Boolean },
+    isSlideShare:   { type: Boolean },
+    isDemo:         { type: Boolean }
   }
 }
 </script>

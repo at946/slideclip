@@ -5,19 +5,20 @@ const scraping = require('./scraping')
 app.get('/slides', async(req, res) => {
   // クエリパラメータのurlを取得し、取得したurlのクエリパラメータを削除
   const url = req.query.url.replace(/\?.*$/, '')
-  var result = null
+  var slides = {}
  
   if (process.env.NODE_ENV == "production") {
     // 本番環境
-    result = await scraping.get_slides(url)
+    slides = await scraping.getSlides(url)
   } else {
     // テスト環境
     switch (url) {
       case "https://speakerdeck.com/success":
-        result = {
+        slides = {
+          sourceId: 1,
           title: "Success SpeakerDeck",
-          source_id: 1,
-          slides: [
+          url: url,
+          images: [
             { url: "/_nuxt/assets/images/slide_image.png", alt: 1 },
             { url: "/_nuxt/assets/images/slide_image.png", alt: 2 },
             { url: "/_nuxt/assets/images/slide_image.png", alt: 3 }
@@ -25,25 +26,25 @@ app.get('/slides', async(req, res) => {
         }
         break
       case "https://www.slideshare.net/success":
-        result = {
+        slides = {
+          sourceId: 2,
           title: "Success SlideShare",
-          source_id: 2,
-          slides: [
+          url: url,
+          images: [
             { url: "/_nuxt/assets/images/slide_image.png", alt: 1 },
             { url: "/_nuxt/assets/images/slide_image.png", alt: 2 }
           ]
         }
         break
       case "https://speakerdeck.com/not_found":
-        break
       case "https://www.slideshare.net/not_found":
         break
       default:
-        result = await scraping.get_slides(url)
+        slides = await scraping.getSlides(url)
     }
   }
   
-  res.send(result)
+  res.send(slides)
 })
 
 module.exports = {

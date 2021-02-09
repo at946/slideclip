@@ -1,18 +1,18 @@
 describe("ユーザーとして、スライドを縦読みしたい、なぜなら横読みより全体を把握して見やすいからだ", () => {
 
-  const root_url = "http://localhost:3000/"
-  const arrange_url = (url) => root_url + "arrange?url=" + encodeURIComponent(url)
-  const sd_url = "https://speakerdeck.com/kishiyyyyy/gke-case-study"
-  const ss_url = "https://www.slideshare.net/Slideshare/slideshare-is-joining-scribd-237760779"
-  const ss_url2 = "https://www.slideshare.net/rochellekopp/rsgt2021-bilingual-crosscultural-discussion-how-to-accelerate-the-adoption-of-agile-and-scrum-in-japan" // スライドとTranscriptの数が不一致
+  const rootUrl = "http://localhost:3000/"
+  const arrangeUrl = (url) => rootUrl + "arrange?url=" + encodeURIComponent(url)
+  const speakerDeckUrl = "https://speakerdeck.com/kishiyyyyy/gke-case-study"
+  const slideShareUrl = "https://www.slideshare.net/Slideshare/slideshare-is-joining-scribd-237760779"
+  const slideShareUrl2 = "https://www.slideshare.net/rochellekopp/rsgt2021-bilingual-crosscultural-discussion-how-to-accelerate-the-adoption-of-agile-and-scrum-in-japan" // スライドとTranscriptの数が不一致
 
   test("トップページで、SpeakerDeckのURLを入力し、Arrangeボタンを選択した場合、入力したURL先のスライドがすべて縦方向に表示されること", async () => {
     // トップページにアクセス
-    await page.goto(root_url)
-    await expect(page.url()).toBe(root_url)
+    await page.goto(rootUrl)
+    await expect(page.url()).toBe(rootUrl)
 
     // URLを入力
-    await page.type("#input_url", sd_url)
+    await page.type("#input_url", speakerDeckUrl)
 
     // Arrangeボタンを押下
     await page.click("#btn_arrange")
@@ -26,7 +26,7 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
     await expect(await page.$("#loading")).toBe(null)
 
     // 検証：Arrangeページに遷移している
-    await expect(page.url()).toBe(arrange_url(sd_url))
+    await expect(page.url()).toBe(arrangeUrl(speakerDeckUrl))
 
     // 検証：表示されているスライドの枚数が正しい
     const slides = await page.$$eval(".slide", nodes => nodes.map(n => { return { src: n.src, alt: n.alt } } ))
@@ -44,16 +44,16 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
     await page.waitForTimeout(2000)
     const pages = await browser.pages()
     const newPage = pages[pages.length - 1]
-    await expect(newPage.url()).toBe("https://twitter.com/intent/tweet?text=" + encodeURIComponent("\"NTTドコモ情報システム部におけるGKE導入事例～パーソナルダッシュボード開発～ / GKE case study\"\n#slideclip") + "&url=" + encodeURIComponent(arrange_url(sd_url)))
+    await expect(newPage.url()).toBe("https://twitter.com/intent/tweet?text=" + encodeURIComponent("\"NTTドコモ情報システム部におけるGKE導入事例～パーソナルダッシュボード開発～ / GKE case study\"\n#slideclip") + "&url=" + encodeURIComponent(arrangeUrl(speakerDeckUrl)))
   })
 
   test("トップページで、SlideShareのURLを入力し、Arrangeボタンを選択した場合、入力したURL先のスライドがすべて縦方向に表示されること", async () => {
     // トップページにアクセス
-    await page.goto(root_url)
-    await expect(page.url()).toBe(root_url)
+    await page.goto(rootUrl)
+    await expect(page.url()).toBe(rootUrl)
 
     // URLを入力
-    await page.type("#input_url", ss_url)
+    await page.type("#input_url", slideShareUrl)
 
     // Arrangeボタンを押下
     await page.click("#btn_arrange")
@@ -67,7 +67,7 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
     await expect(await page.$("#loading")).toBe(null)
 
     // 検証：Arrangeページに遷移している
-    await expect(page.url()).toBe(arrange_url(ss_url))
+    await expect(page.url()).toBe(arrangeUrl(slideShareUrl))
 
     // 検証：表示されているスライドの枚数が正しい
     const slides = await page.$$eval(".slide", nodes => nodes.map(n => { return { src: n.src, alt: n.alt } } ))
@@ -82,11 +82,11 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
 
   test("トップページで、スライドとTranscriptの数が異なるSlideShareのURLを入力し、Arrangeボタンを選択した場合、入力したURL先のスライドがすべて縦方向に表示されること", async () => {
     // トップページにアクセス
-    await page.goto(root_url)
-    await expect(page.url()).toBe(root_url)
+    await page.goto(rootUrl)
+    await expect(page.url()).toBe(rootUrl)
 
     // URLを入力
-    await page.type("#input_url", ss_url2)
+    await page.type("#input_url", slideShareUrl2)
 
     // Arrangeボタンを押下
     await page.click("#btn_arrange")
@@ -100,7 +100,7 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
     await expect(await page.$("#loading")).toBe(null)
 
     // 検証：Arrangeページに遷移している
-    await expect(page.url()).toBe(arrange_url(ss_url2))
+    await expect(page.url()).toBe(arrangeUrl(slideShareUrl2))
 
     // 検証：表示されているスライドの枚数が正しい
     const slides = await page.$$eval(".slide", nodes => nodes.map(n => { return { src: n.src, alt: n.alt } } ))

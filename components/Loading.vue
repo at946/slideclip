@@ -1,6 +1,6 @@
 <template>
   <div id="loading">
-    <div style="display: flex; justify-content: center; height: 100%; align-items: center;">
+    <div class="loading-content">
       <div class="spinner">
         <div class="double-bounce1"></div>
         <div class="double-bounce2"></div>
@@ -18,6 +18,13 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.loading-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .spinner {
