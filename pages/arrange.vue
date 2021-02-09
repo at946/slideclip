@@ -12,6 +12,7 @@
           v-model="search_url"
           :has_clear="true"
           @keydown.enter="inputEnter($event)"
+          @keydown.right="alert('hello')"
           placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"
         />
         <ErrorMessage
@@ -32,7 +33,7 @@
 
       <section class="mx-auto py-4">
         <div v-for="(slide, index) in display_slides" :key="index" id="sec_slides" class="wrap-slide">
-          <img :src="slide.url" :alt="slide.transcript" class="slide">
+          <img :src="slide.url" :alt="slide.transcript" :id="'slide_' + index" class="slide" tabindex=0>
         </div>
       </section>
 
@@ -113,16 +114,31 @@ export default {
   },
   
   mounted() {
-    // query parameterのurlからURLをセットする
     if (this.$route.query.url) {
-      this.search_url = this.$route.query.url.trim()
-      this.get_slides()
+      // query parameterのurlがある場合、
+      this.search_url = this.$route.query.url.trim() // query parameterのurlからURLをセット
+      this.get_slides() // スライドをスクレイピング
+
       this.$nextTick(() => {
+        // EventListenerを登録
         window.addEventListener("scroll", this.handleScroll)
+        window.addEventListener("keydown", this.handleKeydown)
       })
     } else {
+      // urlのquery parameterがない場合、トップページにリダイレクト
       this.$router.push("/")
     }
+  },
+
+  destroy() {
+    window.removeEventListener("scroll", this.handleScroll)
+    window.removeEventListener("keydown", this.handleKeydown)
+  },
+
+  beforeRouteLeave(to, from, next) {
+    window.removeEventListener("scroll", this.handleScroll)
+    window.removeEventListener("keydown", this.handleKeydown)
+    next()
   },
 
   methods: {
@@ -164,7 +180,7 @@ export default {
     },
 
     inputEnter(event) {
-      if (event.keyCode !== 13) return
+      if (event.key !== "Enter") return
       if (!this.search_url.trim().length) return
       this.get_slides()
     },
@@ -189,6 +205,42 @@ export default {
 
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" })
+    },
+
+    handleKeydown(e) {
+      // いずれかの要素がfocusされている場合は動かない
+      if (e.target.tagName !== "BODY") return
+
+      switch (e.key) {
+        case "ArrowLeft":
+          // 「→」がタイプされた場合
+          this.scrollToPrev()
+          break
+        case "ArrowRight":
+          // 「←」がタイプされた場合
+          this.scrollToNext()
+          break
+      }
+    },
+
+    scrollToPrev() {
+      var slideCoordY = 0
+      // 後ろのスライドから順にy座標を取得し、今のスクロール位置より下のスライドが現れたらそのスライドにスクロールする
+      for (let i = this.display_slides.length; i > 0; i--) {
+        slideCoordY = document.getElementById("slide_" + (i - 1)).getBoundingClientRect().y + window.pageYOffset
+        if (this.coordY > slideCoordY) break
+      }
+      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: "smooth" }) }, 0)
+    },
+
+    scrollToNext() {
+      // 前のスライドから順にy座標を取得し、今のスクロール位置より上のスライドが現れたらそのスライドにスクロールする
+      var slideCoordY = 0
+      for (let i = 0; i < this.display_slides.length; i++) {
+        slideCoordY = document.getElementById("slide_" + i).getBoundingClientRect().y + window.pageYOffset
+        if (this.coordY < slideCoordY) break
+      }
+      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: "smooth" }) }, 0)
     }
   }
 }
