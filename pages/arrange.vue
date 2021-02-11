@@ -60,7 +60,7 @@
     <transition name="fade">
       <CircleButton
         id="btn_scroll_top"
-        @click="scrollToTop"
+        @click="smoothScroll(0)"
         v-if="coordY > 200"
       >
         <fa :icon="faArrowUp" />
@@ -194,14 +194,14 @@ export default {
       this.coordY = window.scrollY
     },
 
-    scrollToTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" })
+    smoothScroll(top) {
+      window.scrollTo({ top: top, behavior: "smooth" })
     },
 
     handleKeydown(e) {
       // 「→」「←」がタイプされたときにスライドをスクロールする
 
-      if (e.target.tagName !== "BODY") return // いずれかの要素がfocusされている場合は動かない
+      if (e.target.tagName === "INPUT") return // いずれかの要素がfocusされている場合は動かない
       if (this.hasError) return // スライドが取得できていない場合は動かない
 
       switch (e.key) {
@@ -217,23 +217,40 @@ export default {
     },
 
     scrollToPrev() {
-      var slideCoordY = 0
-      // 後ろのスライドから順にy座標を取得し、今のスクロール位置より下のスライドが現れたらそのスライドにスクロールする
+      // 後ろのスライドから順に中心座標を取得し、今の画面の中心座標より上部に表示されているスライドが現れたらそのスライドにスクロールする
+      const displayCoordY = this.displayCoordY()  // 表示画面の中心座標
+      var slide
       for (let i = this.displaySlides.images.length; i > 0; i--) {
-        slideCoordY = document.getElementById('slide_' + (i - 1)).getBoundingClientRect().y + window.pageYOffset
-        if (this.coordY > slideCoordY) break
+        slide = document.getElementById('slide_' + (i - 1))
+        if (displayCoordY - this.slideCoordY(slide) > 1) break
       }
-      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: 'smooth' }) }, 0)
+      setTimeout(() => { this.smoothScroll(this.coordYForCenteringSlide(slide)) }, 0)
     },
 
     scrollToNext() {
-      // 前のスライドから順にy座標を取得し、今のスクロール位置より上のスライドが現れたらそのスライドにスクロールする
-      var slideCoordY = 0
+      // 前のスライドから順に中心座標を取得し、今の画面の中心座標より下部に表示されているスライドが現れたらそのスライドにスクロールする
+      const displayCoordY = this.displayCoordY() // 表示画面の中心座標
+      var slide
       for (let i = 0; i < this.displaySlides.images.length; i++) {
-        slideCoordY = document.getElementById('slide_' + i).getBoundingClientRect().y + window.pageYOffset
-        if (this.coordY < slideCoordY) break
+        slide = document.getElementById('slide_' + i)
+        if (this.slideCoordY(slide) - displayCoordY > 1) break
       }
-      setTimeout(() => { window.scrollTo({ top: slideCoordY, behavior: 'smooth' }) }, 0)
+      setTimeout(() => { this.smoothScroll(this.coordYForCenteringSlide(slide)) }, 0)
+    },
+
+    displayCoordY() {
+      // 表示画面の中心座標を計算する
+      return window.innerHeight / 2
+    },
+
+    slideCoordY(el_slide) {
+      // slideの表示画面から見た相対の中心座標を計算する
+      return el_slide.getBoundingClientRect().y + (el_slide.height / 2)
+    },
+
+    coordYForCenteringSlide(el_slide) {
+      // slideを画面中央に表示するためのスクロール位置（top）を計算する
+      return el_slide.getBoundingClientRect().y + window.pageYOffset - (window.innerHeight / 2) + (el_slide.height / 2)
     }
   }
 }

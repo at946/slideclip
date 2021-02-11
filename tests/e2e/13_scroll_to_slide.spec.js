@@ -10,30 +10,30 @@ describe("PCユーザーとして、キーボードで左右を入力したら�
     // 検証：表示y座標が0であること
     await expect(await page.evaluate(() => window.scrollY )).toBe(0)
 
-    // スライドの位置を取得
-    const coordYOfSlide0 = await page.$eval("#slide_0", el => el.getBoundingClientRect().y + window.pageYOffset)
-    const coordYOfSlide1 = await page.$eval("#slide_1", el => el.getBoundingClientRect().y + window.pageYOffset)
+    // スライドの中心の位置を取得
+    const coordYOfSlide0 = await page.$eval("#slide_0", el => el.getBoundingClientRect().y + window.pageYOffset + (el.height / 2))
+    const coordYOfSlide1 = await page.$eval("#slide_1", el => el.getBoundingClientRect().y + window.pageYOffset + (el.height / 2))
 
     // 「→」をタイプ
     await page.keyboard.press("ArrowRight")
     await page.waitForTimeout(500)
 
-    // 検証：表示y座標が1枚目のスライド位置
-    await expect(await page.evaluate(() => window.scrollY)).toBe(coordYOfSlide0)
+    // 検証：画面中心に1枚目のスライドの中心が表示されている
+    await expect(await page.evaluate(() => window.scrollY + (window.innerHeight / 2))).toBe(coordYOfSlide0)
 
     // 「→」をタイプ
     await page.keyboard.press("ArrowRight")
     await page.waitForTimeout(500)
 
-    // 検証：表示y座標が2枚目のスライド位置
-    await expect(await page.evaluate(() => window.scrollY)).toBe(coordYOfSlide1)
+    // 検証：画面中心に2枚目のスライドの中心が表示されている
+    await expect(await page.evaluate(() => window.scrollY + (window.innerHeight / 2))).toBe(coordYOfSlide1)
 
     // 「→」をタイプ
     await page.keyboard.press("ArrowRight")
     await page.waitForTimeout(500)
 
-    // 検証：表示y座標が2枚目のスライド位置から変わらない
-    await expect(await page.evaluate(() => window.scrollY)).toBe(coordYOfSlide1)
+    // 検証：画面中心に2枚目のスライドの中心が表示されている
+    await expect(await page.evaluate(() => window.scrollY + (window.innerHeight / 2))).toBe(coordYOfSlide1)
   })
 
   test("Arrangeページで、スライドが表示されているとき、「←」をタイプした場合、前のスライドまでスクロールされること", async () => {
@@ -41,8 +41,8 @@ describe("PCユーザーとして、キーボードで左右を入力したら�
     await page.goto(arrange_ss_url)
 
     // スライドの位置を取得
-    const coordYOfSlide0 = await page.$eval("#slide_0", el => el.getBoundingClientRect().y + window.pageYOffset)
-    const coordYOfSlide1 = await page.$eval("#slide_1", el => el.getBoundingClientRect().y + window.pageYOffset)
+    const coordYOfSlide0 = await page.$eval("#slide_0", el => el.getBoundingClientRect().y + window.pageYOffset + (el.height / 2))
+    const coordYOfSlide1 = await page.$eval("#slide_1", el => el.getBoundingClientRect().y + window.pageYOffset + (el.height / 2))
 
     // 「→」を2回タイプ
     await page.keyboard.press("ArrowRight")
@@ -50,22 +50,22 @@ describe("PCユーザーとして、キーボードで左右を入力したら�
     await page.keyboard.press("ArrowRight")
     await page.waitForTimeout(500)
 
-    // 検証：表示y座標が2枚目のスライド位置
-    await expect(await page.evaluate(() =>  window.scrollY)).toBe(coordYOfSlide1)
+    // 検証：画面中心に2枚目のスライドの中心が表示されている
+    await expect(await page.evaluate(() =>  window.scrollY + (window.innerHeight / 2))).toBe(coordYOfSlide1)
 
     // 「←」をタイプ
     await page.keyboard.press("ArrowLeft")
     await page.waitForTimeout(500)
 
-    // 検証：表示y座標が1枚目のスライド位置
-    await expect(await page.evaluate(() => window.scrollY)).toBe(coordYOfSlide0)
+    // 検証：画面中心に1枚目のスライドの中心が表示されている
+    await expect(await page.evaluate(() => window.scrollY + (window.innerHeight / 2))).toBe(coordYOfSlide0)
 
     // 「←」をタイプ
     await page.keyboard.press("ArrowLeft")
     await page.waitForTimeout(500)
 
-    // 検証：表示y座標が1枚目のスライド位置から変わらない
-    await expect(await page.evaluate(() => window.scrollY)).toBe(coordYOfSlide0)
+    // 検証：画面中心に1枚目のスライドの中心が表示されている
+    await expect(await page.evaluate(() => window.scrollY + (window.innerHeight / 2))).toBe(coordYOfSlide0)
   })
 
   test("Arrangeページで、スライドが表示され、URLのINPUTにフォーカスしているとき、「→」「←」をタイプした場合、スライドのスクロールはされないこと", async () => {
