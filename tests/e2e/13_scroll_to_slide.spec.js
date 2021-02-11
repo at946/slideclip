@@ -6,6 +6,8 @@ describe("PCユーザーとして、キーボードで左右を入力したら�
   test("Arrangeページで、スライドが表示されているとき、「→」をタイプした場合、次のスライドまでスクロールされること", async () => {
     // Arrangeページにアクセス（SlideShare（スライド2枚））
     await page.goto(arrange_ss_url)
+    await page.waitForSelector("#loading")
+    await page.waitForSelector("#loading",  { hidden: true })
 
     // 検証：表示y座標が0であること
     await expect(await page.evaluate(() => window.scrollY )).toBe(0)
@@ -39,6 +41,8 @@ describe("PCユーザーとして、キーボードで左右を入力したら�
   test("Arrangeページで、スライドが表示されているとき、「←」をタイプした場合、前のスライドまでスクロールされること", async () => {
     // Arrangeページにアクセス（SlideShare（スライド2枚））
     await page.goto(arrange_ss_url)
+    await page.waitForSelector("#loading")
+    await page.waitForSelector("#loading",  { hidden: true })
 
     // スライドの位置を取得
     const coordYOfSlide0 = await page.$eval("#slide_0", el => el.getBoundingClientRect().y + window.pageYOffset + (el.height / 2))
@@ -71,6 +75,8 @@ describe("PCユーザーとして、キーボードで左右を入力したら�
   test("Arrangeページで、スライドが表示され、URLのINPUTにフォーカスしているとき、「→」「←」をタイプした場合、スライドのスクロールはされないこと", async () => {
     // Arrangeページにアクセス（SlideShare（スライド2枚））
     await page.goto(arrange_ss_url)
+    await page.waitForSelector("#loading")
+    await page.waitForSelector("#loading",  { hidden: true })
 
     // #input_urlをフォーカス
     await page.focus("#input_url")
@@ -93,6 +99,8 @@ describe("PCユーザーとして、キーボードで左右を入力したら�
   test("Arrangeページで、スライドが表示されていないとき、「→」「←」をタイプした場合、スクロールはされないこと", async () => {
     // Arrangeページにアクセス（NOT FOUND）
     await page.goto(arrange_ss_404_url)
+    await page.waitForSelector("#loading")
+    await page.waitForSelector("#loading",  { hidden: true })
 
     // 「→」をタイプ
     await page.keyboard.press("ArrowRight")

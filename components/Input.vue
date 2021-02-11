@@ -65,6 +65,7 @@ export default {
     border: solid 2px gray;
     box-sizing: border-box;
     border-radius: 5px;
+    margin-right: -1rem;
 
     &::after {
       content: "a"
@@ -73,7 +74,7 @@ export default {
 
   .clear {
     position: absolute;
-    right: 1rem;
+    right: 0.5rem;
     height: 100%;
     cursor: pointer;
     z-index: 5;
