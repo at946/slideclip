@@ -1,11 +1,37 @@
 <template>
-  <button @click="$emit('click')">
+  <button
+    :class="{
+      'btn-twitter'     : isTwitter,
+      'btn-speaker-deck': isSpeakerDeck,
+      'btn-slide-share' : isSlideShare
+    }"
+    :style="styles"
+    @click="$emit('click')"
+  >
     <slot />
   </button>
 </template>
 
 <script>
 export default {
+  name: 'circleButton',
+  
+  props: {
+    bottom:         { type: String, require: false, default: "1rem" },
+    right:          { type: String, require: false, default: "1rem" },
+    isTwitter:      { type: Boolean, require: false, default: false },
+    isSpeakerDeck:  { type: Boolean, require: false, default: false },
+    isSlideShare:   { type: Boolean, require: false, default: false }
+  },
+
+  computed: {
+    styles () {
+      return {
+        '--bottom': this.bottom,
+        '--right':  this.right,
+      }
+    }
+  }
 }
 </script>
 
@@ -14,8 +40,8 @@ export default {
 
 button {
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: var(--bottom);
+  right: var(--right);
   height: 3rem;
   width: 3rem;
   border-radius: 3rem;
@@ -25,4 +51,17 @@ button {
   text-align: center;
   box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, .5);
 }
+
+.btn-twitter {
+  background-color: $twitter;
+}
+
+.btn-speaker-deck {
+  background-color: $speakerDeck;
+}
+
+.btn-slide-share {
+  background-color: $slideShare;
+}
+
 </style>

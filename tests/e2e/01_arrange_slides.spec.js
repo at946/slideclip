@@ -40,6 +40,7 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
     await expect(slides[slides.length - 1].alt).toBe("Thank you")
 
     // 検証：Twitterシェア時にタイトルがフィルインされる
+    await page.click("#btn_menu")
     await page.click("#btn_twitter_share")
     await page.waitForTimeout(2000)
     const pages = await browser.pages()

@@ -10,6 +10,10 @@ describe("スライドをDLしたくなったユーザーとして、Originalペ
     await page.goto(arrange_url(sd_url))
     await page.waitForSelector("#loading", { hidden: true })
 
+    // メニューボタンをクリック
+    await expect(await page.$("#btn_source")).toBe(null)
+    await page.click("#btn_menu")
+
     // 検証：GoToSouceボタンのアイコンがSD
     await expect(await page.$("#btn_source > #icon_sd")).not.toBe(null)
     await expect(await page.$("#btn_source > #icon_ss")).toBe(null)
@@ -22,12 +26,21 @@ describe("スライドをDLしたくなったユーザーとして、Originalペ
     const pages = await browser.pages()
     const newPage = pages[pages.length - 1]
     await expect(newPage.url()).toBe(sd_url)
+
+    // 検証：元タブのメニューが消えていること
+    await expect(await page.$("#btn_menu")).not.toBe(null)
+    await expect(await page.$("#menu_buttons")).toBe(null)
+    await expect(await page.$("#btn_source")).toBe(null)
   })
 
   test("Arrangeページで、SlideShareのスライドが表示されている場合、GoTo SSボタンが表示され、押下するとSlideShareのスライドのページに別タブで遷移すること", async () => {
     // SSのURLでArrangeページにアクセス
     await page.goto(arrange_url(ss_url))
     await page.waitForSelector("#loading", { hidden: true })
+
+    // メニューボタンをクリック
+    await expect(await page.$("#btn_source")).toBe(null)
+    await page.click("#btn_menu")
 
     // 検証：GoToSouceボタンのアイコンがSS
     await expect(await page.$("#btn_source > #icon_ss")).not.toBe(null)
@@ -41,6 +54,11 @@ describe("スライドをDLしたくなったユーザーとして、Originalペ
     const pages = await browser.pages()
     const newPage = pages[pages.length - 1]
     await expect(newPage.url()).toBe(ss_url)
+
+    // 検証：元タブのメニューが消えていること
+    await expect(await page.$("#btn_menu")).not.toBe(null)
+    await expect(await page.$("#menu_buttons")).toBe(null)
+    await expect(await page.$("#btn_source")).toBe(null)
   })
 
   test("Arrangeページで、スライドが表示されていない場合、GoTo SDまたはGoTo SSボタンは表示されないこと", async () => {
@@ -49,6 +67,7 @@ describe("スライドをDLしたくなったユーザーとして、Originalペ
     await page.waitForSelector("#loading", { hidden: true })
 
     // 検証：GoToSourceボタンが表示されない
+    await expect(await page.$("#btm_menu")).toBe(null)
     await expect(await page.$("#btn_source")).toBe(null)
   })
 

@@ -34,45 +34,69 @@
         </div>
       </section>
 
-      <section class="pb-6 text-center" v-if="!hasError">
-        <Button
-          id="btn_twitter_share"
-          :isTwitter="true"
-          @click="shareToTwitter"
-          class="mb-2"
-        >
-          <fa :icon="faTwitter" class="mr-1" />Share
-        </Button>
-        <br />
-        <Button
+    </div>
+
+    <transition
+      name="fade"
+      v-if="!hasError"
+    >
+      <CircleButton
+        id="btn_menu"
+        v-if="!openMenu"
+        @click="toggleMenu"
+      >
+        <fa :icon="faBars" />
+      </CircleButton>
+
+      <div
+        id="menu_buttons"
+        v-if="openMenu"
+      >
+        <transition name="fade">
+          <CircleButton
+            id="btn_scroll_top"
+            bottom="13rem"
+            v-if="coordY > 200"
+            @click="smoothScroll(0); toggleMenu();"
+          >
+            <fa :icon="faArrowUp" />
+          </CircleButton>
+        </transition>
+
+        <CircleButton
           id="btn_source"
           :isSpeakerDeck="displaySlides.sourceId === 1"
           :isSlideShare="displaySlides.sourceId === 2"
-          @click="goToSource"
+          bottom="9rem"
+          @click="goToSource(); toggleMenu();"
         >
-          <fa :icon="faSpeakerDeck" id="icon_sd" class="mr-1" v-if="displaySlides.sourceId === 1" />
-          <fa :icon="faSlideshare" id="icon_ss" class="mr-1" v-if="displaySlides.sourceId === 2" />
-          Go to source
-        </Button>
-      </section>
-    </div>
+          <fa :icon="faSpeakerDeck" id="icon_sd" v-if="displaySlides.sourceId === 1" />
+          <fa :icon="faSlideshare" id="icon_ss" v-if="displaySlides.sourceId === 2" />
+        </CircleButton>
 
-    <transition name="fade">
-      <CircleButton
-        id="btn_scroll_top"
-        @click="smoothScroll(0)"
-        v-if="coordY > 200"
-      >
-        <fa :icon="faArrowUp" />
-      </CircleButton>
+        <CircleButton
+          id="btn_twitter_share"
+          :isTwitter="true"
+          bottom="5rem"
+          @click="shareToTwitter(); toggleMenu();"
+        >
+          <fa :icon="faTwitter" />
+        </CircleButton>
+
+        <CircleButton
+          id="btn_close_menu"
+          @click="toggleMenu"
+        >
+          <fa :icon="faTimes" />
+        </CircleButton>
+      </div>
     </transition>
-
   </div>
 </template>
 
 <script>
 import { faTwitter, faSpeakerDeck, faSlideshare } from "@fortawesome/free-brands-svg-icons"
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons"
+import { faArrowUp, faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
 import Loading from "@/components/Loading.vue"
 import Input from "@/components/Input.vue"
 import CircleButton from "@/components/CircleButton.vue"
@@ -92,6 +116,7 @@ export default {
           // alt: String
         // }]
       },
+      openMenu: false
     }
   },
 
@@ -106,10 +131,12 @@ export default {
       get () { return this.$store.state.search.url },
       set (value) { this.$store.commit("search/set_url", value) }
     },
-    faTwitter () { return faTwitter },
-    faSpeakerDeck () { return faSpeakerDeck },
-    faSlideshare () { return faSlideshare },
-    faArrowUp () { return faArrowUp }
+    faTwitter     ()  { return faTwitter },
+    faSpeakerDeck ()  { return faSpeakerDeck },
+    faSlideshare  ()  { return faSlideshare },
+    faArrowUp     ()  { return faArrowUp },
+    faBars        ()  { return faBars },
+    faTimes       ()  { return faTimes }
   },
   
   mounted() {
@@ -251,6 +278,10 @@ export default {
     coordYForCenteringSlide(el_slide) {
       // slideを画面中央に表示するためのスクロール位置（top）を計算する
       return el_slide.getBoundingClientRect().y + window.pageYOffset - (window.innerHeight / 2) + (el_slide.height / 2)
+    },
+
+    toggleMenu() {
+      this.openMenu = !this.openMenu
     }
   }
 }

@@ -3,11 +3,9 @@
     :id="id"
     :class="{
       'btn-twitter': isTwitter,
-      'btn-speaker-deck': isSpeakerDeck,
-      'btn-slide-share': isSlideShare,
       'btn-demo' : isDemo
     }"
-    v-bind:disabled="isDisabled"
+    :disabled="isDisabled"
     @click="$emit('click')"
   >
     <slot />
@@ -20,8 +18,6 @@ export default {
     id:             { type: String },
     isDisabled:     { type: Boolean },
     isTwitter:      { type: Boolean },
-    isSpeakerDeck:  { type: Boolean },
-    isSlideShare:   { type: Boolean },
     isDemo:         { type: Boolean }
   }
 }
@@ -59,13 +55,5 @@ button {
 
 .btn-twitter {
   background-color: $twitter;
-}
-
-.btn-speaker-deck {
-  background-color: $speakerDeck;
-}
-
-.btn-slide-share {
-  background-color: $slideShare;
 }
 </style>
