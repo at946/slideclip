@@ -7,6 +7,8 @@ describe("ユーザーとして、スライドを縦読みしたい、なぜな�
   const slideShareUrl2 = "https://www.slideshare.net/rochellekopp/rsgt2021-bilingual-crosscultural-discussion-how-to-accelerate-the-adoption-of-agile-and-scrum-in-japan" // スライドとTranscriptの数が不一致
   const slideShareUrl3 = "https://www.slideshare.net/aratafuji/ss-241035965" // transcriptsがない
 
+  jest.setTimeout(20000)
+
   test("トップページで、SpeakerDeckのURLを入力し、Arrangeボタンを選択した場合、入力したURL先のスライドがすべて縦方向に表示されること", async () => {
     // トップページにアクセス
     await page.goto(rootUrl)

@@ -1,3 +1,5 @@
+const productName = "SlideClip"
+const description = "Arrange slides vertically for easy viewing. SlideClipはスライドシェアサービス（SlideShare、SpeakerDeck）のスライドを縦読みできるように並べ替え、スライドを眺めやすくしてくれます。"
 const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
 
 export default {
@@ -18,17 +20,17 @@ export default {
       lang: 'ja',
       prefix: 'og: http://ogp.me/ns#'
     },
-    title: process.env.npm_package_name || '',
+    title: productName,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'description', content: process.env.npm_package_description },
-      { property: 'og:site_name', content: process.env.npm_package_name },
+      { name: 'description', content: description },
+      { property: 'og:site_name', content: productName },
       { property: 'og:type', content: 'website' },
-      { property: 'og:title', content: process.env.npm_package_name },
-      { property: 'og:description', content: process.env.npm_package_description },
+      { property: 'og:title', content: productName },
+      { property: 'og:description', content: description },
       { property: 'og:url', content: baseUrl },
-      { property: 'og:image', content: baseUrl + '/ogp.png' },
+      { property: 'og:image', content: `${baseUrl}/ogp.png` },
       { name: 'twitter:card', content: 'summary' },
       {  name: 'google-site-verification', content: 'bU22upozdv2QbW2QOc8N7sC_1xD8Lu9nOOGzjIfh6rQ'}
     ],
@@ -73,7 +75,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.BASE_URL
+    baseURL: baseUrl
   },
   /*
   ** Fontawesome
