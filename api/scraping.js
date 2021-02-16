@@ -74,31 +74,33 @@ async function getSlideShareSlides(page) {
     const images = []
     
     // スライドの要素を取得
-    const el_slide_images = document.getElementsByClassName("slide_image")
+    const slide_images = document.getElementsByClassName("slide_image")
 
-    if (el_slide_images.length) {
+    if (slide_images.length) {
       // スライドが表示されているページの場合
       isFound = true
       title = document.getElementsByClassName("j-title-breadcrumb")[0].innerText
       // alt用にtranscriptの要素を取得
-      const el_transcripts = document.getElementsByClassName("transcripts")[0].getElementsByTagName("li")
-      if (el_slide_images.length === el_transcripts.length) {
+      const transcripts_wrapper = document.getElementsByClassName("transcripts")[0]
+      var transcripts
+      if (transcripts_wrapper) transcripts = transcripts_wrapper.getElementsByTagName("li")
+      if (transcripts && slide_images.length === transcripts.length) {
         // スライドとTranscriptの数が一致している場合、imageUrlとtranscriptを取得
-        for (let i = 0; i < el_slide_images.length; i++) {
+        for (let i = 0; i < slide_images.length; i++) {
           images.push(
             {
-              url: el_slide_images[i].dataset.full,
-              alt: el_transcripts[i].innerText
+              url: slide_images[i].dataset.full,
+              alt: transcripts[i].innerText
             }
           )
         }
       } else {
         // スライドとTranscriptの数が一致しない場合、imageUrlとaltを取得
-        for (let i = 0; i < el_slide_images.length; i++) {
+        for (let i = 0; i < slide_images.length; i++) {
           images.push(
             {
-              url: el_slide_images[i].dataset.full,
-              alt: el_slide_images[i].alt
+              url: slide_images[i].dataset.full,
+              alt: slide_images[i].alt
             }
           )
         }
