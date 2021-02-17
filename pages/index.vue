@@ -30,11 +30,11 @@
       </Card>
 
       <Card class="card">
-        <h1 class="card-title mb-3">Just enter the URL and click !</h1>
+        <h1 class="card-title mb-1-3">Just enter the URL and click !</h1>
         <Input
-          class="mb-3"
+          class="mb-1-3"
           id="input_url_demo"
-          value="https://speakerdeck.com/kishiyyyyy/gke-case-study"
+          value="https://speakerdeck.com/hoge/fuga"
           :isReadonly="true"
         />
         <div class="touch-button-wrap">
@@ -161,6 +161,9 @@ export default {
 }
 
 .card-title {
+  @media screen and (max-width: 896px) {
+    font-size: 1.2rem;
+  }
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -174,6 +177,7 @@ export default {
     bottom: -32px;
     display: inline;
     left: 50%;
+    z-index: 10;
   }
 }
 
@@ -205,6 +209,15 @@ export default {
   background-image: url('~@/assets/images/slide_image.png');
   background-repeat: repeat-y;
   background-position: center;
+}
+
+.mb-1-3 {
+  @media screen and (max-width: 896px) {
+    margin-bottom: 0.5rem;
+  }
+  @media screen and (min-width: 896px) {
+    margin-bottom: 1.5rem;
+  }
 }
 
 </style>

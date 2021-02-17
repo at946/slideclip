@@ -16,7 +16,8 @@
   @extend .mx-auto;
   position: relative;
   max-width: 600px;
-  min-height: 240px;
+  // min-height: 240px;
+  // aspect-ratio: 16 / 9;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
   
   &::before {

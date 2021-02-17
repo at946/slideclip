@@ -66,15 +66,12 @@ export default {
     box-sizing: border-box;
     border-radius: 5px;
     margin-right: -1rem;
-
-    &::after {
-      content: "a"
-    }
+    margin-left: -1rem;
   }
 
   .clear {
     position: absolute;
-    right: 0.5rem;
+    right: 1rem;
     height: 100%;
     cursor: pointer;
     z-index: 5;
