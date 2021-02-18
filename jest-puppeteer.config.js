@@ -4,7 +4,7 @@ module.exports = {
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   },
   server: {
-    command: 'yarn run testServer',
+    command: 'yarn build && yarn start --port 3000',
     port: 3000,
     launchTimeout: 50000
   }

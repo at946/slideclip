@@ -8,9 +8,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "test": "jest -i",
-    "testAll": "jest -i ./tests/e2e",
-    "testServer": "nuxt build && nuxt start --port 3000"
+    "test": "jest -i"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
