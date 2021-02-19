@@ -1,6 +1,6 @@
 {
   "name": "slideclip",
-  "description": "Arrange slides vertically for easy viewing.",
+  "description": "Arrange slides vertically for easy viewing. The slides of the slide-sharing service (SlideShare, SpeakerDeck) can be displayed vertically side by side.",
   "version": "1.0.0",
   "private": true,
   "scripts": {

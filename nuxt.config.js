@@ -1,10 +1,10 @@
 const productName = "SlideClip"
-const description = "Arrange slides vertically for easy viewing. SlideClipはスライドシェアサービス（SlideShare、SpeakerDeck）のスライドを縦読みできるように並べ替え、スライドを眺めやすくしてくれます。"
 const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
 
 export default {
   env: {
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    urlRegExp: "^https:\/\/(www.slideshare.net|speakerdeck.com)\/.*"
   },
   /*
   ** Nuxt target
@@ -24,15 +24,15 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'description', content: description },
+      { name: 'description', content: process.env.npm_package_description },
       { property: 'og:site_name', content: productName },
       { property: 'og:type', content: 'website' },
       { property: 'og:title', content: productName },
-      { property: 'og:description', content: description },
+      { hid: "og:description", property: 'og:description', content: process.env.npm_package_description },
       { property: 'og:url', content: baseUrl },
       { property: 'og:image', content: `${baseUrl}/ogp.png` },
       { name: 'twitter:card', content: 'summary' },
-      {  name: 'google-site-verification', content: 'bU22upozdv2QbW2QOc8N7sC_1xD8Lu9nOOGzjIfh6rQ'}
+      { name: 'google-site-verification', content: 'bU22upozdv2QbW2QOc8N7sC_1xD8Lu9nOOGzjIfh6rQ'}
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

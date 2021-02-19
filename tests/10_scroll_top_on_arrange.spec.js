@@ -70,7 +70,7 @@ describe("ユーザーとして、Arrangeページでトップまで戻りたい
   test("Arrangeページで、スクロール位置がトップの場合、スクロールトップボタンが表示されないこと", async () => {
     // Arrangeページにアクセス
     await page.goto(arrange_url)
-    await page.waitForSelector("#loading", { hidden: true })
+    await page.evaluate(() => { window.scrollTo({ top: 0}) })
 
     // メニューボタンをクリック
     await page.click("#btn_menu")
@@ -78,7 +78,7 @@ describe("ユーザーとして、Arrangeページでトップまで戻りたい
     // 検証：スクロールトップボタンが表示されていないこと
     await expect(await page.$("#btn_scroll_top")).toBe(null)
 
-    // 検証：スクロールしたらスクロールトップボタンが標示される
+    // 検証：スクロールしたらスクロールトップボタンが表示される
     await page.evaluate(() => { window.scrollTo({ top: 2000 }) })
     await page.waitForSelector("#btn_scroll_top")
     await expect(await page.$("#btn_scroll_top")).not.toBe(null)

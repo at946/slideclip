@@ -17,7 +17,7 @@
         <ErrorMessage
           msg="The slides cannot be found..."
           class="mb-2 err_msg"
-          v-if="hasError"
+          v-if="!Object.keys(displaySlides).length"
         />
         <Button
           id="btn_arrange"
@@ -28,7 +28,7 @@
         </Button>
       </section>
 
-      <section class="mx-auto py-4" v-if="!hasError">
+      <section class="mx-auto py-4" v-if="Object.keys(displaySlides).length">
         <div v-for="(slide, index) in displaySlides.images" :key="index" id="sec_slides" class="wrap-slide text-center mx-2">
           <img :src="slide.url" :alt="slide.alt" :id="'slide_' + index" class="slide" tabindex=0>
         </div>
@@ -38,7 +38,7 @@
 
     <transition
       name="fade"
-      v-if="!hasError"
+      v-if="Object.keys(displaySlides).length"
     >
       <CircleButton
         id="btn_menu"
@@ -102,28 +102,53 @@ import Input from "@/components/Input.vue"
 import CircleButton from "@/components/CircleButton.vue"
 
 export default {
-  data() {
-    return {
-      isLoading: true,
-      hasError: false,
-      coordY: 0,
-      displaySlides: {
-        // source_id: Integer [ 1 SpeakerDeck, 2 SlideShare ],
-        // url: String,
-        // title: String,
-        // images: [{
-          // url: String,
-          // alt: String
-        // }]
-      },
-      openMenu: false
-    }
-  },
-
   components: {
     Loading,
     Input,
     CircleButton
+  },
+
+  data() {
+    return {
+      isLoading: false,
+      coordY: 0,
+      openMenu: false,
+    }
+  },
+
+  async asyncData({ query, $axios, redirect, store, env }) {
+    var displaySlides = {}
+    // displaySlidesの構造
+    // {
+    //   source_id: Integer (1: SpeakerDeck, 2: SlideShare),
+    //   url: String,
+    //   title: String,
+    //   images: [{
+    //     url: String,
+    //     alt: String
+    //   }]
+    // }
+
+    // Query parameterにurlがセットされていない場合、トップページにリダイレクトする
+    if (!query.url) redirect("/")
+
+    // Query parameterからsearchUrlをセット
+    store.state.search.url = query.url.trim()
+
+    // SpeakerDeck or SlideShareのURLの場合、スライドをスクレイピングする
+    if (store.state.search.url.match(new RegExp(env.urlRegExp, 'g'))) {
+      displaySlides = await $axios.$get('/api/slides', { params: { url: store.state.search.url } })
+    }
+
+    return { displaySlides: displaySlides }
+  },
+
+  head() {
+    return {
+      meta: [
+        { hid: "og:description", property: 'og:description', content: this.displaySlides.title }
+      ]
+    }
   },
 
   computed: {
@@ -140,19 +165,10 @@ export default {
   },
   
   mounted() {
-    if (this.$route.query.url) {
-      // query parameterのurlがある場合、
-      this.searchUrl = this.$route.query.url.trim() // query parameterのurlからURLをセット
-      this.getSlides() // スライドをスクレイピング
-      this.$nextTick(() => {
-        // EventListenerを登録
-        window.addEventListener("scroll", this.handleScroll)
-        window.addEventListener("keydown", this.handleKeydown)
-      })
-    } else {
-      // urlのquery parameterがない場合、トップページにリダイレクト
-      this.$router.push("/")
-    }
+    this.$nextTick(() => {
+      window.addEventListener("scroll", this.handleScroll)
+      window.addEventListener("keydown", this.handleKeydown)
+    })
   },
 
   destroy() {
@@ -168,44 +184,37 @@ export default {
 
   methods: {
     async getSlides() {
-      this.isLoading = true // ローディングアニメーションを開始する
-      this.displaySlides = {} // パラメータ初期化
+      // ローディングアニメーションを開始
+      this.isLoading = true
 
+      // searchUrlの前後のスペースを削除し、searchUrlが空白なら処理を中断
       this.searchUrl = this.searchUrl.trim()
+      if (!this.searchUrl) { this.isLoading = false; return; }
+
+      // Query parameterを更新
       this.$router.push({ query: { url: this.searchUrl } })
+      this.displaySlides = {}
 
-      if (
-        this.searchUrl.indexOf("https://speakerdeck.com/") === 0 ||
-        this.searchUrl.indexOf("https://www.slideshare.net/") === 0
-      ) {
-        // SpeakerDeck or SlideShareのURLの場合、スライドをスクレイピングする
+      // SpeakerDeck、SlideShareのURLの場合、スライドをスクレイピング
+      if ( this.searchUrl.match(new RegExp(process.env.urlRegExp, 'g')) ) {
         this.displaySlides = await this.$axios.$get("/api/slides", { params: { url: this.searchUrl } })
-
-        if (Object.keys(this.displaySlides).length) {
-          // スライドが取得できた場合、スライドを表示する
-          this.hasError = false
-        } else {
-          // スライドが取得できなかった場合、エラーメッセージを表示する
-          this.hasError = true
-        }
-      } else {
-        // SpeakerDeck or SlideShareのURLでない場合、エラーメッセージを表示する
-        this.hasError = true
       }
+
       // ローディングアニメーションを終了する
       this.isLoading = false
     },
 
     inputEnter(event) {
-      if (event.keyCode !== 13) return // IME確定時は発火しない
-      this.searchUrl = this.searchUrl.trim()
-      if (!this.searchUrl.length) return
+      if (event.keyCode !== 13) return // 日本語変換の確定時は発火しない
       this.getSlides()
     },
 
     shareToTwitter() {
       window.open(
-        "https://twitter.com/intent/tweet?text=" + encodeURIComponent("\"" + this.displaySlides.title + "\"\n#slideclip") + "&url=" + encodeURIComponent(window.location.origin + this.$route.fullPath),
+        "https://twitter.com/intent/tweet?text=" 
+        + encodeURIComponent(`\"${this.displaySlides.title}\"\n#slideclip`)
+        + "&url="
+        + encodeURIComponent(window.location.origin + this.$route.fullPath),
         "_blank"
       )
     },
@@ -229,7 +238,7 @@ export default {
       // 「→」「←」がタイプされたときにスライドをスクロールする
 
       if (e.target.tagName === "INPUT") return // いずれかの要素がfocusされている場合は動かない
-      if (this.hasError) return // スライドが取得できていない場合は動かない
+      if (!Object.keys(this.displaySlides).length) return // スライドが取得できていない場合は動かない
 
       switch (e.key) {
         case "ArrowLeft":
@@ -283,6 +292,7 @@ export default {
     toggleMenu() {
       this.openMenu = !this.openMenu
     }
+
   }
 }
 </script>

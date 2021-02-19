@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loading v-if="isLoading" />
     <section class="hero pt-10 pb-4 text-center mx-2">
       <h1 class="hero-title mb-2">Arrange slides vertically for easy viewing.</h1>
       <p class="hero-description mb-4">
@@ -85,6 +86,12 @@ import { faUserCircle } from "@fortawesome/free-regular-svg-icons"
 import { faHandPeace } from "@fortawesome/free-regular-svg-icons"
 
 export default {
+  data() {
+    return {
+      isLoading: false
+    }
+  },
+
   computed: {
     searchUrl: {
       get () { return this.$store.state.search.url },
@@ -112,6 +119,7 @@ export default {
     },
 
     startArrange () {
+      this.isLoading = true
       this.searchUrl = this.searchUrl.trim()
       this.$router.push({
         path: '/arrange',
