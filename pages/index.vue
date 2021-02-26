@@ -12,6 +12,7 @@
         id="input_url"
         class="mb-2 hero-input"
         :hasClear="true"
+        :isAutoFocus="true"
         v-model="searchUrl"
         @keydown.enter="inputEnter($event)"
         placeholder="https://speakerdeck.com/kishiyyyyy/gke-case-study"

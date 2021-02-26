@@ -8,7 +8,7 @@ describe("色々なスライドを見たいユーザーとして、Arrangeペー
   const err_msg = "The slides cannot be found..."
 
   // inputのvalueをclearするfunction
-  async function clear_input (target) {
+  clear_input = async (target) => {
     await target.click({ clickCount: 3 })
     await target.press("Backspace")
   }
