@@ -8,7 +8,7 @@ describe("サービス提供者として、利用規約を伝えたい、なぜ�
     await page.goto(root_url)
 
     // フッターの「terms of service」リンクをクリック
-    await expect(await page.$eval("#link_footer_tos", el => el.textContent)).toBe("terms of service")
+    await expect(await page.$eval("#link_footer_tos", el => el.innerText)).toBe("terms of service")
     await page.click("#link_footer_tos")
 
     // 検証：TermsOfServiceページに遷移している
@@ -22,7 +22,7 @@ describe("サービス提供者として、利用規約を伝えたい、なぜ�
     await page.waitForSelector("#loading", { hidden: true })
 
     // フッターの「terms of service」リンクをクリック
-    await expect(await page.$eval("#link_footer_tos", el => el.textContent)).toBe("terms of service")
+    await expect(await page.$eval("#link_footer_tos", el => el.innerText)).toBe("terms of service")
     await page.click("#link_footer_tos")
 
     // 検証：TermsOfServiceページに遷移している
@@ -35,7 +35,7 @@ describe("サービス提供者として、利用規約を伝えたい、なぜ�
     await page.goto(root_url + "pp")
 
     // フッターの「terms of service」リンクをクリック
-    await expect(await page.$eval("#link_footer_tos", el => el.textContent)).toBe("terms of service")
+    await expect(await page.$eval("#link_footer_tos", el => el.innerText)).toBe("terms of service")
     await page.click("#link_footer_tos")
 
     // 検証：TermsOfServiceページに遷移している
@@ -48,7 +48,7 @@ describe("サービス提供者として、利用規約を伝えたい、なぜ�
     await page.goto(tos_url)
 
     // フッターの「terms of service」リンクをクリック
-    await expect(await page.$eval("#link_footer_tos", el => el.textContent)).toBe("terms of service")
+    await expect(await page.$eval("#link_footer_tos", el => el.innerText)).toBe("terms of service")
     await page.click("#link_footer_tos")
 
     // 検証：TermsOfServiceページに遷移している

@@ -19,14 +19,16 @@ describe("Twitterでシェアを見かけたユーザーとして、OGPでスラ
   })
 
   test("スライドが表示されるArrangeページのOGPは、デスクリプションが表示するスライドタイトルであること", async () => {
+    const slideTitle = 'Success SpeakerDeck'
+
     // Arrangeページにアクセス（スライドが表示される）
     await page.goto(`${root_url}/arrange?url=${decodeURIComponent('https://speakerdeck.com/success')}`)
     
     // 検証：OGPのタイトルが「SlideClip」であること
-    await expect(await page.$eval("meta[property='og:title']", el => el.content)).toBe(title)
+    await expect(await page.$eval("meta[property='og:title']", el => el.content)).toBe(`${slideTitle} - ${title}`)
 
     // 検証：OGPのデスクリプションが表示するスライドのタイトルであること
-    await expect(await page.$eval("meta[property='og:description", el => el.content)).toBe("Success SpeakerDeck")
+    await expect(await page.$eval("meta[property='og:description", el => el.content)).toBe(slideTitle)
 
     // 検証：OGPのURLがトップページのURLであること
     await expect(await page.$eval("meta[property='og:url']", el => el.content)).toBe(root_url)

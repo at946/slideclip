@@ -144,9 +144,11 @@ export default {
   },
 
   head() {
+    var ogTitle = !!this.displaySlides.title ? `${this.displaySlides.title} - ${process.env.productName}` : process.env.productName
     return {
       meta: [
-        { hid: "og:description", property: 'og:description', content: this.displaySlides.title }
+        { hid: 'og:title', property: 'og:title', content: ogTitle},
+        { hid: 'og:description', property: 'og:description', content: this.displaySlides.title }
       ]
     }
   },

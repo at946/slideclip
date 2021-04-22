@@ -4,6 +4,7 @@ const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
 export default {
   env: {
     baseUrl: baseUrl,
+    productName: productName,
     urlRegExp: "^https:\/\/(www.slideshare.net|speakerdeck.com)\/.*"
   },
   /*
@@ -27,12 +28,12 @@ export default {
       { name: 'description', content: process.env.npm_package_description },
       { property: 'og:site_name', content: productName },
       { property: 'og:type', content: 'website' },
-      { property: 'og:title', content: productName },
+      { hid: 'og:title', property: 'og:title', content: productName },
       { hid: "og:description", property: 'og:description', content: process.env.npm_package_description },
       { property: 'og:url', content: baseUrl },
       { property: 'og:image', content: `${baseUrl}/ogp.png` },
       { name: 'twitter:card', content: 'summary' },
-      { name: 'google-site-verification', content: 'bU22upozdv2QbW2QOc8N7sC_1xD8Lu9nOOGzjIfh6rQ'}
+      { name: 'google-site-verification', content: process.env.GOOGLE_SITE_VERIFICATION }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

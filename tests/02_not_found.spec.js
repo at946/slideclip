@@ -26,7 +26,7 @@ describe("ユーザーとして、スライドが見つからないことを知�
     await expect(await page.$(".slide")).toBe(null)
 
     // 検証：エラーメッセージが表示される
-    const msg = await page.$eval(".err_msg", el => el.textContent)
+    const msg = await page.$eval(".err_msg", el => el.innerText)
     await expect(msg).toBe(err_msg)
   })
 

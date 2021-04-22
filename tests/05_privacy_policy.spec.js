@@ -8,7 +8,7 @@ describe("サービス提供者として、プライバシーポリシーを伝�
     await page.goto(root_url)
 
     // フッターの「privacy policy」リンクをクリック
-    await expect(await page.$eval("#link_footer_pp", el => el.textContent)).toBe("privacy policy")
+    await expect(await page.$eval("#link_footer_pp", el => el.innerText)).toBe("privacy policy")
     await page.click("#link_footer_pp")
 
     // 検証：PrivacyPolicyページに遷移している
@@ -22,7 +22,7 @@ describe("サービス提供者として、プライバシーポリシーを伝�
     await page.waitForSelector("#loading", { hidden: true })
 
     // フッターの「privacy policy」リンクをクリック
-    await expect(await page.$eval("#link_footer_pp", el => el.textContent)).toBe("privacy policy")
+    await expect(await page.$eval("#link_footer_pp", el => el.innerText)).toBe("privacy policy")
     await page.click("#link_footer_pp")
 
     // 検証：PrivacyPolicyページに遷移している
@@ -35,7 +35,7 @@ describe("サービス提供者として、プライバシーポリシーを伝�
     await page.goto(root_url + "tos")
 
     // フッターの「privacy policy」リンクをクリック
-    await expect(await page.$eval("#link_footer_pp", el => el.textContent)).toBe("privacy policy")
+    await expect(await page.$eval("#link_footer_pp", el => el.innerText)).toBe("privacy policy")
     await page.click("#link_footer_pp")
 
     // 検証：PrivacyPolicyページに遷移している
@@ -48,7 +48,7 @@ describe("サービス提供者として、プライバシーポリシーを伝�
     await page.goto(pp_url)
 
     // フッターの「privacy policy」リンクをクリック
-    await expect(await page.$eval("#link_footer_pp", el => el.textContent)).toBe("privacy policy")
+    await expect(await page.$eval("#link_footer_pp", el => el.innerText)).toBe("privacy policy")
     await page.click("#link_footer_pp")
 
     // 検証：PrivacyPolicyページに遷移している
